@@ -448,10 +448,10 @@ Aucune.
 
 ### Tâches
 
-- [ ] I3.1 Exiger `## Tâche actuelle`.
-- [ ] I3.2 Exiger une preuve non vide sous `## Dernière tâche validée`.
-- [ ] I3.3 Conserver l'unicité de `## NEXT ACTION`.
-- [ ] I3.4 Fixtures : `Tâche actuelle` absente, preuve absente, deux
+- [x] I3.1 Exiger `## Tâche actuelle`.
+- [x] I3.2 Exiger une preuve non vide sous `## Dernière tâche validée`.
+- [x] I3.3 Conserver l'unicité de `## NEXT ACTION`.
+- [x] I3.4 Fixtures : `Tâche actuelle` absente, preuve absente, deux
       `NEXT ACTION`, et un snapshot conforme.
 
 ### Validation

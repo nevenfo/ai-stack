@@ -8,25 +8,21 @@ quota Codex.
 
 ## Tâche actuelle
 
-I3 — compléter `continuity-check.sh` pour qu'il couvre réellement le contrat de
-`progress.md`.
+I4 — mesurer la configuration Codex réellement effective, avant toute coupe.
 
 ## Dernière tâche validée
 
-I2 — `parity.sh` détecte désormais un miroir Git périmé.
+I3 — `continuity-check.sh` couvre désormais le contrat de `progress.md`.
 
 Validation :
 
-- `bash ~/.agents/parity.sh` : `PARITÉ OK`, exit 0, live et miroir alignés.
-- Le contrôle a lui-même détecté sa propre copie miroir périmée avant
-  resynchronisation — première détection réelle, non simulée.
-- Trois tests négatifs, chacun suivi d'une restauration vérifiée par `diff` :
-  miroir passé à `sonnet` → `FAIL miroir : Claude : opus` ; live passé à
-  `sonnet` → `FAIL Claude : opus attendu` ; `caveman` réactivé dans le live
-  Codex → `FAIL Codex : caveman devait être false`. Exit 1 dans les trois cas.
-- I1 : le live n'a qu'une couche de settings applicable — ni `settings.local.json`,
-  ni settings administrés, ni `ANTHROPIC_MODEL` — portant `model: opus` et
-  `effortLevel: high`. Le miroir seul était faux, périmé depuis `cc6e9d2`.
+- `bash ~/.agents/continuity-fixtures.sh` : `pass=4 fail=0`. Les trois fixtures
+  dégradées échouent en exit 1, la conforme passe en exit 0, et chacune échoue
+  sur sa seule cause — le test rejette une fixture qui produirait plus d'un
+  `FAIL`.
+- `bash ~/.agents/continuity-check.sh .` : `CONTINUITÉ STRUCTURELLE OK`, dont
+  « section « Tâche actuelle » » et « preuve de la dernière tâche validée ».
+- `bash ~/.agents/parity.sh` : `PARITÉ OK`, miroir compris.
 
 ## Décisions actives
 
@@ -42,6 +38,9 @@ Validation :
   défaut et dernier choix de session sont un seul et même champ. Documenté dans
   `README.md` comme source de dérive connue.
 - Le bloc canonique ne s'édite que dans `CONTRACT.md`, jamais dans un harness.
+- Une tâche déclarée validée doit porter une preuve listée sous `Validation :` ;
+  le contrôle exige le marqueur littéral et au moins une puce, sans juger la
+  valeur de la preuve.
 - Les intitulés de sections de `plan.md`/`progress.md` sont littéraux, accents
   compris ; `continuity-check.sh` le vérifie et reste volontairement strict.
 - Aucune métrique de contexte ou de quota inventée. Chaque unité de la phase I
@@ -68,8 +67,8 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I3.1 — étendre `~/.agents/continuity-check.sh` pour exiger `## Tâche actuelle`
-et une preuve non vide sous `## Dernière tâche validée`, en conservant
-l'unicité de `## NEXT ACTION`, puis prouver par quatre fixtures — section
-absente, preuve absente, deux `NEXT ACTION`, snapshot conforme — que les trois
-premières échouent et que la dernière passe.
+I4.1 — établir comment la version Codex installée charge et fusionne
+`config.toml` et les profils `cli-lean` / `cli-kicad` : lire l'aide et la
+documentation du client installé, puis relever sur une session réelle les
+plugins actifs, les MCP visibles et les skills visibles, sans rien supposer de
+l'effet d'un `enabled = false` sur une table héritée.

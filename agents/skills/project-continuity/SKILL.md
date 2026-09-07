@@ -61,7 +61,7 @@ Structure minimale du plan :
 
 Les intitulés de sections sont **littéraux et invariants**, accents compris : `### Dépendances` et `### Tâches`, jamais `### Dependances` ni `### Taches`. Ce sont des ancres de handoff, pas de la prose : c'est par elles que l'autre harness, un `rg` ou un contrôle automatique retrouvent l'état. Une variante d'orthographe casse la reprise aussi sûrement qu'une section absente.
 
-`bash ~/.agents/continuity-check.sh [dossier]` vérifie cette forme de façon déterministe — présence, sections, unicité de la `NEXT ACTION`, absence de trace brute, complétude des unités. Il ne juge jamais si la `NEXT ACTION` est la bonne ni si une case cochée est prouvée : cela reste le travail du preflight.
+`bash ~/.agents/continuity-check.sh [dossier]` vérifie cette forme de façon déterministe — présence, sections, unicité de la `NEXT ACTION`, existence d'une preuve sous `Validation :`, absence de trace brute, complétude des unités. Il ne juge jamais si la `NEXT ACTION` est la bonne ni si une preuve listée est convaincante : cela reste le travail du preflight. `bash ~/.agents/continuity-fixtures.sh` prouve qu'il sait échouer.
 
 ## Contrat de progress.md
 

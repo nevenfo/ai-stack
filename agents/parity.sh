@@ -151,6 +151,7 @@ else
   mirror_file "CONTRACT.md"         "agents/CONTRACT.md"          "$CONTRACT"
   mirror_file "parity.sh"           "agents/parity.sh"            "$AGENTS_DIR/parity.sh"
   mirror_file "continuity-check.sh" "agents/continuity-check.sh"  "$AGENTS_DIR/continuity-check.sh"
+  mirror_file "continuity-fixtures.sh" "agents/continuity-fixtures.sh" "$AGENTS_DIR/continuity-fixtures.sh"
 
   # Valeurs sémantiques critiques. Les constantes ci-dessus sont l'attendu
   # commun : le live est contrôlé plus haut, le miroir l'est ici, si bien qu'une
