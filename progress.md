@@ -2,35 +2,30 @@
 
 ## Phase actuelle
 
-Phase E — suppression d'Antigravity.
+Phase H — parité prouvée.
 Branche `ai/claude-codex-parity`, partie de `main` (`cc6e9d2`).
 
 ## Tâche actuelle
 
-E1 — décâbler Antigravity du dépôt, des contrats et de la configuration active.
+H2 — tests de reprise croisée sur dépôts jetables.
 
 ## Dernière tâche validée
 
-F1 — contrôle de parité déterministe, avec son test négatif. Les phases B, C, D et
-F sont closes : le contrat canonique est unique et injecté des deux côtés, le skill
-`project-continuity` est partagé physiquement et complet, modèle et effort sont
-alignés.
+E1 et H1 — Antigravity décâblé, matrice de parité publiée dans `README.md`.
 
 Validation :
 
-- `bash ~/.agents/parity.sh` : `PARITÉ OK`, code de retour 0. Bloc canonique
-  identique des deux côtés, 14 invariants présents, 3 skills partagés, modèle et
-  effort conformes.
-- Test négatif : un accent retiré dans le bloc côté Claude donne `PARITÉ ROMPUE`
-  et un code de retour 1 ; `parity.sh --fix` restaure et repasse à 0.
-- Jonctions : `sha256sum` identique via `~/.agents/skills/<s>` et
-  `~/.claude/skills/<s>` pour les trois skills ; une écriture dans la source est
-  vue immédiatement depuis `~/.claude`. Claude Code a rechargé les skills à
-  travers les jonctions.
-- `project-continuity` : les quatorze points du protocole sont couverts, vérifiés
-  motif par motif ; `SKILL.md` fait 9 805 octets, `git-delivery.md` 5 414.
-- Codex : `model = "gpt-6-astra"`, `model_reasoning_effort = "high"`, présents dans
-  `~/.codex/models_cache.json` du client `0.153.4`.
+- Dépôt : `antigravity/` supprimé, `shared/conv-exporter/hooks/antigravity_hook.py`
+  retiré, mentions purgées d'`AGENTS.md`, `README.md` et des trois `REFERENCE.md`.
+- Machine : `~/.gemini/{GEMINI.md,settings.json,config,commands,hooks}` et leurs
+  `.bak` déplacés dans `.stack-backups/20260907-parity/gemini-decable/` ;
+  `~/.agents/rules/` archivé. Seul `~/.gemini/antigravity-cli/` subsiste — runtime
+  de l'application, non désinstallée.
+- Recherche insensible à la casse sur `antigravity`, `gemini`, `AGY` : aucun
+  câblage dans le dépôt ni dans la configuration active des deux harnesses ; seule
+  occurrence restante, le contrôle qui vérifie cette absence.
+- `bash ~/.agents/parity.sh` : `PARITÉ OK`.
+- Checkpoint poussé : `63b3054` sur `origin/ai/claude-codex-parity`.
 
 ## Décisions actives
 
@@ -54,13 +49,14 @@ Aucun.
 
 - Socle : `~/.agents/{CONTRACT.md,parity.sh,skills/}`.
 - Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`.
-- À décâbler : `antigravity/`, `shared/conv-exporter/hooks/antigravity_hook.py`,
-  `~/.gemini/`, `~/.agents/rules/`, mentions dans `AGENTS.md` et `README.md`.
+- Dépôt : `agents/`, `README.md` (matrice de parité), `AGENTS.md` (contrat export).
+- Bac à sable des tests : `%TEMP%/claude/.../scratchpad`.
 
 ## NEXT ACTION
 
-E1 — supprimer `antigravity/` du dépôt, retirer Antigravity des contrats
-`AGENTS.md`, `README.md` et de `shared/`, archiver `~/.gemini/` et
-`~/.agents/rules/` dans `.stack-backups` sans désinstaller le logiciel, puis
-vérifier par recherche insensible à la casse qu'aucun câblage fonctionnel ne
-subsiste.
+H2 — exécuter les huit scénarios de reprise croisée sur des dépôts jetables :
+initialisation par un harness et reprise par l'autre dans les deux sens,
+réparation d'un `progress.md` faux de chaque côté, normalisation d'un plan
+incomplet, absence d'arrêt artificiel après un PASS, contradiction entre
+`progress.md` et les tests, et projet persistant sans remote GitHub. Conserver
+pour chaque test une preuve vérifiable.

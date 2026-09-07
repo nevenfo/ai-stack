@@ -1,6 +1,6 @@
 # Intégration des harnesses
 
-Ce document définit le workflow commun à Claude Code, Codex CLI et Antigravity. Le statut des modes appartient exclusivement à `README.md`, à relire avant chaque invocation.
+Ce document définit le workflow commun à Claude Code et Codex CLI. Le statut des modes appartient exclusivement à `README.md`, à relire avant chaque invocation.
 
 ## Activation
 

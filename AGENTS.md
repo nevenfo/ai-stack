@@ -1,10 +1,23 @@
 # ai-stack
 
 `ai-stack` est la représentation Git propre de la configuration **actuelle** de la
-stack IA locale : Claude Code, Codex, Antigravity, et les composants qui participent
-directement à leur fonctionnement. Ce n'est ni un moteur d'export, ni une base
-d'état, ni une copie de projets. La source de vérité est toujours la configuration
-live ; ce dépôt en est le miroir versionné.
+stack IA locale : Claude Code et Codex — deux harnesses pairs et interchangeables —
+et les composants qui participent directement à leur fonctionnement. Ce n'est ni un
+moteur d'export, ni une base d'état, ni une copie de projets. La source de vérité
+est toujours la configuration live ; ce dépôt en est le miroir versionné.
+
+## Parité
+
+Les deux harnesses sont deux implémentations du même harness logique. Leur contrat
+commun a une source unique, `agents/CONTRACT.md`, recopiée entre marqueurs dans
+`claude/CLAUDE.md` et `codex/AGENTS.md` ; les skills partagés ont un seul
+propriétaire, `agents/skills/`. Toute différence entre les deux configurations doit
+relever de la syntaxe native, d'une capacité native réellement différente, ou d'un
+modèle propre à la plateforme — jamais d'une divergence de politique.
+
+`agents/parity.sh` le vérifie de façon déterministe, et `--fix` réinjecte le bloc
+canonique. Le lancer fait partie d'`export` : un miroir qui enregistrerait une
+divergence silencieuse entre les deux harnesses ne vaudrait rien.
 
 ## Intention `export`
 
@@ -16,8 +29,8 @@ Git) sont des bras, jamais le lieu d'une décision de périmètre.
 
 1. Vérifier le dépôt (`ai-stack`, branche `main`, examiner `git status`) avant toute
    écriture.
-2. Inspecter la stack live en lecture seule : Claude Code, Codex, Antigravity, et ce
-   qui gravite réellement autour de leur fonctionnement — instructions, settings,
+2. Inspecter la stack live en lecture seule : Claude Code, Codex, et ce qui gravite
+   réellement autour de leur fonctionnement — instructions, settings,
    agents, skills, hooks, MCP, plugins, wrappers, profils shell, intégrations,
    sondes de version, sources de modèles. Partir des signaux forts (`HOME`/
    `USERPROFILE`, `APPDATA`/`LOCALAPPDATA`, `PATH`, gestionnaires de paquets),
@@ -45,7 +58,8 @@ Git) sont des bras, jamais le lieu d'une décision de périmètre.
    worktree.
 8. Relire l'intégralité du `git diff`.
 9. Seconde passe : rechercher secret accidentel, doublon, élément obsolète, omission
-   manifeste.
+   manifeste. Lancer `bash agents/parity.sh` : une parité rompue se corrige avant le
+   commit, elle ne se consigne pas.
 10. Si le résultat est cohérent : un commit ciblé (jamais `git add .` aveugle),
     puis `git push origin main`. Un échec de push conserve le commit local. La
     sortie finale résume changements, exclusions, sécurité, commit et push, sans

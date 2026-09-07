@@ -237,10 +237,10 @@ Aucune.
 
 ### Tâches
 
-- [ ] E1.1 Supprimer `antigravity/` du dépôt.
-- [ ] E1.2 Retirer Antigravity des contrats `AGENTS.md`, `README.md`, `plan.md`.
-- [ ] E1.3 Retirer la surface d'intégration Antigravity de `shared/`.
-- [ ] E1.4 Archiver `~/.gemini/` et `~/.agents/rules/` hors de la stack, sans
+- [x] E1.1 Supprimer `antigravity/` du dépôt.
+- [x] E1.2 Retirer Antigravity des contrats `AGENTS.md`, `README.md`, `plan.md`.
+- [x] E1.3 Retirer la surface d'intégration Antigravity de `shared/`.
+- [x] E1.4 Archiver `~/.gemini/` et `~/.agents/rules/` hors de la stack, sans
       désinstaller le logiciel.
 
 ### Validation
@@ -316,7 +316,7 @@ F1.
 
 ### Tâches
 
-- [ ] H1.1 Renseigner la matrice dans `README.md`.
+- [x] H1.1 Renseigner la matrice dans `README.md`.
 
 ### Validation
 

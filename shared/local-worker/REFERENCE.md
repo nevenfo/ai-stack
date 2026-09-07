@@ -15,7 +15,7 @@ dépôt depuis le 2026-09-07.
 
 | Point de câblage | Déclaration |
 |---|---|
-| `claude/skills/`, `shared/agents/` (Codex), `antigravity/skills/` → skill `local-worker` | s'active uniquement sur demande explicite de l'utilisateur |
+| `agents/skills/local-worker/` → skill partagé par les deux harnesses | s'active uniquement sur demande explicite de l'utilisateur |
 | invocation | `C:\Users\FlowUP\Documents\Etabli\Tools\local-worker\local-worker.cmd <mode>` |
 | backend | LM Studio (préparé à la demande par le wrapper `--prepare-backend`) |
 

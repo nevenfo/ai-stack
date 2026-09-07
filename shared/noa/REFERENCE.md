@@ -2,8 +2,8 @@
 
 **Dépôt :** https://github.com/nevenfo/noa (privé)
 **Commit épinglé :** `9f42e185e59b198014108be1a0ba78e1e855fb7e` (2026-09-07)
-**Rôle dans la stack :** sous-agents LLM locaux read-only que Claude Code, Codex
-et Antigravity appellent volontairement pour l'exploration/analyse de volume,
+**Rôle dans la stack :** sous-agents LLM locaux read-only que Claude Code et Codex
+appellent volontairement pour l'exploration/analyse de volume,
 plus l'observabilité KPI append-only de toute la stack.
 
 NOA a été extrait d'`ai-stack` le 2026-09-07 (historique P5→P8 préservé). Son
@@ -17,7 +17,7 @@ propre dépôt. `ai-stack` n'en garde que la surface d'intégration ci-dessous.
 | `claude/settings.json` → `permissions.allow` | `Bash(C:/Users/FlowUP/noa/bin/noa-agent.cmd:*)` |
 | `claude/settings.json` → `hooks.SessionEnd` | `python C:/Users/FlowUP/noa/hooks/claude_session_end.py` |
 | `codex/config.toml` → `[[hooks.SessionEnd.hooks]]` | `python C:/Users/FlowUP/noa/hooks/codex_session_end.py` (à la suite du hook conv-exporter) |
-| `claude/skills/noa-local-agents/`, `shared/agents/` (Codex), `antigravity/skills/noa-local-agents/` | skills qui instruisent l'appel de `noa-agent.cmd` |
+| `agents/skills/noa-local-agents/` (skill partagé par les deux harnesses) | skills qui instruisent l'appel de `noa-agent.cmd` |
 
 Le modèle local, la fenêtre de contexte, le budget d'étapes et les rôles
 (`explore`/`analyze`/`context`) sont définis dans `noa_agents/config.py` et

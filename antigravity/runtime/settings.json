@@ -1,7 +1,0 @@
-{
-  "enableTelemetry": false,
-  "model": "Gemini 3.6 Flash (Low)",
-  "trustedWorkspaces": [
-    "C:\\Users\\FlowUP"
-  ]
-}
