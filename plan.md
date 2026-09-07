@@ -292,8 +292,8 @@ E1, F1.
 
 ### Tâches
 
-- [ ] G1.1 Resynchroniser `claude/`, `codex/`, `shared/` et le dossier `agents/`.
-- [ ] G1.2 Relire le diff complet et vérifier l'absence de secret.
+- [x] G1.1 Resynchroniser `claude/`, `codex/`, `shared/` et le dossier `agents/`.
+- [x] G1.2 Relire le diff complet et vérifier l'absence de secret.
 - [ ] G1.3 Commit ciblé, push, puis intégration dans `main`.
 
 ### Validation
@@ -322,11 +322,12 @@ F1.
 
 Aucune case vide sans justification technique nommée.
 
-## H2 — Tests de reprise croisée
+## H2 — Tests de reprise croisée, côté Claude Code
 
 ### Objectif
 
-Prouver l'interchangeabilité sur des dépôts jetables, pas par déclaration.
+Prouver sur des dépôts jetables, et non par déclaration, que Claude Code applique
+le contrat : preflight, réparation, validation, checkpoint, auto-poursuite.
 
 ### Dépendances
 
@@ -334,14 +335,45 @@ G1.
 
 ### Tâches
 
-- [ ] H2.1 Test 1 — Claude initialise, Codex reprend.
-- [ ] H2.2 Test 2 — Codex initialise, Claude reprend.
-- [ ] H2.3 Tests 3 et 4 — `progress.md` faux, réparé de chaque côté.
-- [ ] H2.4 Test 5 — plan incomplet, même normalisation des deux côtés.
-- [ ] H2.5 Test 6 — unité PASS, checkpoint, puis `NEXT ACTION` sans arrêt artificiel.
-- [ ] H2.6 Test 7 — contradiction entre `progress.md` et les tests, état corrigé.
-- [ ] H2.7 Test 8 — dépôt persistant sans GitHub, même logique d'initialisation.
+- [x] H2.1 Fixture conforme initialisée par Claude Code, reprise à froid par un
+      processus Claude Code sans contexte.
+- [x] H2.2 `progress.md` faux — état déclaré contredit par les tests — détecté et
+      réparé.
+- [x] H2.3 Plan incomplet — unité sans `Objectif`, `Dépendances` ou `Validation` —
+      normalisé.
+- [x] H2.4 Unité PASS suivie d'un checkpoint puis d'une `NEXT ACTION`, sans arrêt
+      artificiel.
+- [x] H2.5 Projet persistant sans remote : logique GitHub consignée, aucun dépôt
+      créé dans un bac à sable.
+- [x] H2.6 Contrôle structurel déterministe des fixtures avant et après reprise.
 
 ### Validation
 
-Chaque test conserve une preuve vérifiable : sortie de commande, diff ou état Git.
+Pour chaque scénario : sortie de `test.sh`, `git log`, arbre propre et
+`continuity-check.sh` conservés comme preuve.
+
+## H3 — Tests de reprise croisée, côté Codex
+
+### Objectif
+
+Prouver la moitié symétrique : Codex reprend un état produit par Claude Code,
+initialise un état que Claude Code reprend, et répare les mêmes dégradations.
+
+### Dépendances
+
+H2. Quota Codex disponible — épuisé le 2026-09-07, réinitialisation annoncée au
+2026-09-12 09:20.
+
+### Tâches
+
+- [ ] H3.1 Codex reprend la fixture `t1-claude-init` et obtient `pass=6 fail=0`.
+- [ ] H3.2 Codex initialise un projet neuf ; un processus Claude Code le reprend à
+      froid depuis `progress.md` seul.
+- [ ] H3.3 Codex répare la fixture dégradée `t5-degrade`.
+- [ ] H3.4 Comparer les deux réparations : mêmes intitulés de sections, même
+      structure d'unités, même granularité de commit.
+
+### Validation
+
+Mêmes preuves qu'en H2, plus une comparaison des états produits par les deux
+harnesses sur la même fixture de départ.

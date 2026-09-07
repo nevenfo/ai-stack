@@ -2,61 +2,70 @@
 
 ## Phase actuelle
 
-Phase H — parité prouvée.
-Branche `ai/claude-codex-parity`, partie de `main` (`cc6e9d2`).
+Phase H — parité prouvée. Branche `ai/claude-codex-parity`, partie de `main`
+(`cc6e9d2`).
 
 ## Tâche actuelle
 
-H2 — tests de reprise croisée sur dépôts jetables.
+G1.3 — intégrer la branche dans `main`.
 
 ## Dernière tâche validée
 
-E1 et H1 — Antigravity décâblé, matrice de parité publiée dans `README.md`.
+H2 — les six scénarios de reprise côté Claude Code, sur dépôts jetables.
 
 Validation :
 
-- Dépôt : `antigravity/` supprimé, `shared/conv-exporter/hooks/antigravity_hook.py`
-  retiré, mentions purgées d'`AGENTS.md`, `README.md` et des trois `REFERENCE.md`.
-- Machine : `~/.gemini/{GEMINI.md,settings.json,config,commands,hooks}` et leurs
-  `.bak` déplacés dans `.stack-backups/20260907-parity/gemini-decable/` ;
-  `~/.agents/rules/` archivé. Seul `~/.gemini/antigravity-cli/` subsiste — runtime
-  de l'application, non désinstallée.
-- Recherche insensible à la casse sur `antigravity`, `gemini`, `AGY` : aucun
-  câblage dans le dépôt ni dans la configuration active des deux harnesses ; seule
-  occurrence restante, le contrôle qui vérifie cette absence.
-- `bash ~/.agents/parity.sh` : `PARITÉ OK`.
-- Checkpoint poussé : `63b3054` sur `origin/ai/claude-codex-parity`.
+- `t1b-claude-resume` : un processus Claude Code sans contexte reprend une fixture
+  initialisée par Claude Code, corrige un `progress.md` qui annonçait « 4 cas sur
+  5 » pour un réel 3 sur 5, livre A1.2 puis enchaîne A2.1 sans s'arrêter.
+  Résultat : `pass=6 fail=0`, trois commits, arbre propre, `continuity-check` OK.
+- `t5c-claude-retest` : fixture dégradée — plan sans `Objectif`/`Dépendances`/
+  `Validation`, `progress.md` annonçant « tests au vert » pour un `fail=1`,
+  `NEXT ACTION` renvoyant à une phase inexistante. Réparée : `pass=6 fail=0`,
+  unité normalisée aux quatre sections, `NEXT ACTION` unique, arrêt sur décision
+  de périmètre. `continuity-check` OK.
+- Défaut trouvé puis corrigé : à la première passe (`t5b-claude`), les intitulés
+  de sections avaient été désaccentués — `### Dependances`, `## Decisions
+  actives`. Ce sont des ancres de handoff ; le skill impose désormais des
+  intitulés littéraux et invariants. Le rejeu confirme la correction.
+- Aucun dépôt distant créé dans les bacs à sable ; l'absence de checkpoint durable
+  est consignée dans le `progress.md` de chaque fixture.
 
 ## Décisions actives
 
 - Deux harnesses pairs. Aucun fallback, aucun propriétaire de projet.
-- `~/.agents/` est le socle canonique commun : `CONTRACT.md`, `parity.sh`,
-  `skills/`. Le miroir le représente dans `agents/`, seul propriétaire des skills
-  partagés — `claude/skills/` ne les duplique plus.
+- `~/.agents/` est le socle canonique : `CONTRACT.md`, `parity.sh`,
+  `continuity-check.sh`, `skills/`. Le miroir le représente dans `agents/`, seul
+  propriétaire des skills partagés.
 - Le bloc canonique ne s'édite que dans `CONTRACT.md`, jamais dans un harness.
-- `agents/skills/project-continuity/agents/openai.yaml` est le packaging Codex du
-  skill ; encodage latin-1 hérité, laissé tel quel, hors périmètre.
-- Aucune métrique de contexte ou de quota inventée : la frontière de session
-  s'appuie sur un signal réellement exposé par le harness.
-- Point de retour : tag `pre-parity-refactor-20260907` ; sauvegarde des configs
-  live dans `C:\Users\FlowUP\.stack-backups\20260907-parity`.
+- Les intitulés de sections de `plan.md`/`progress.md` sont littéraux, accents
+  compris ; `continuity-check.sh` le vérifie et reste volontairement strict.
+- Aucune métrique de contexte ou de quota inventée.
+- Point de retour : tag `pre-parity-refactor-20260907` ; configuration live
+  sauvegardée dans `C:\Users\FlowUP\.stack-backups\20260907-parity`.
 
 ## Blocage actif
 
-Aucun.
+H3 — les tests côté Codex sont bloqués : quota épuisé le 2026-09-07,
+réinitialisation annoncée par le client au 2026-09-12 09:20. Le lancement a
+toutefois confirmé la configuration : `model: gpt-6-astra`, `reasoning effort:
+high`, hooks chargés. Fixtures prêtes et intactes : `t1-claude-init` et
+`t5-degrade` dans le scratchpad de session.
+
+Point d'attention distinct, sans action : Codex signale « Skill descriptions were
+shortened to fit the skills context budget ». Des descriptions tronquées dégradent
+le routage ; réduire le nombre de plugins activés relève d'un arbitrage
+utilisateur.
 
 ## Fichiers / zones utiles
 
-- Socle : `~/.agents/{CONTRACT.md,parity.sh,skills/}`.
+- Socle : `~/.agents/{CONTRACT.md,parity.sh,continuity-check.sh,skills/}`.
 - Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`.
 - Dépôt : `agents/`, `README.md` (matrice de parité), `AGENTS.md` (contrat export).
-- Bac à sable des tests : `%TEMP%/claude/.../scratchpad`.
+- Fixtures : `%TEMP%/claude/.../scratchpad/parity-tests/`.
 
 ## NEXT ACTION
 
-H2 — exécuter les huit scénarios de reprise croisée sur des dépôts jetables :
-initialisation par un harness et reprise par l'autre dans les deux sens,
-réparation d'un `progress.md` faux de chaque côté, normalisation d'un plan
-incomplet, absence d'arrêt artificiel après un PASS, contradiction entre
-`progress.md` et les tests, et projet persistant sans remote GitHub. Conserver
-pour chaque test une preuve vérifiable.
+G1.3 — ouvrir la pull request de `ai/claude-codex-parity` vers `main` sur
+`nevenfo/ai-stack`, la fusionner après relecture du diff complet, puis vérifier
+que `main` distant porte bien la refonte.

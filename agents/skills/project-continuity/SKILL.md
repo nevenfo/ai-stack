@@ -59,6 +59,10 @@ Structure minimale du plan :
 ### Validation
 ```
 
+Les intitulés de sections sont **littéraux et invariants**, accents compris : `### Dépendances` et `### Tâches`, jamais `### Dependances` ni `### Taches`. Ce sont des ancres de handoff, pas de la prose : c'est par elles que l'autre harness, un `rg` ou un contrôle automatique retrouvent l'état. Une variante d'orthographe casse la reprise aussi sûrement qu'une section absente.
+
+`bash ~/.agents/continuity-check.sh [dossier]` vérifie cette forme de façon déterministe — présence, sections, unicité de la `NEXT ACTION`, absence de trace brute, complétude des unités. Il ne juge jamais si la `NEXT ACTION` est la bonne ni si une case cochée est prouvée : cela reste le travail du preflight.
+
 ## Contrat de progress.md
 
 Snapshot normalement de 300 à 800 tokens :
