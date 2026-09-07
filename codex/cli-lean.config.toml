@@ -77,3 +77,28 @@ trusted_hash = "sha256:732ace240c2201bfe2924ac50f529024ecf9f7327e8f2ca5726d4d30f
 
 [tui.model_availability_nux]
 gpt-6-astra = 4
+
+
+# Skills système du client, sans usage en coding principal. Ils restent
+# disponibles à la demande : la configuration de base les conserve, donc Codex
+# Desktop et toute session lancée sans profil les voient encore.
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\imagegen\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\openai-docs\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\plugin-creator\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\skill-creator\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\skill-installer\SKILL.md'
+enabled = false

@@ -8,26 +8,27 @@ quota Codex.
 
 ## Tâche actuelle
 
-I5 — vérifier ce qui reste réellement chargé en session de coding, et si les
-surfaces restantes valent une coupe.
+I7 — mesure intermédiaire : rejouer la baseline I4 et décider si une
+optimisation plus agressive reste justifiée.
 
 ## Dernière tâche validée
 
-I6 — le MCP KiCad ne fuit plus dans une session de coding Codex.
+I5 — le profil de coding Codex ne charge plus que ce qui sert au coding.
 
 Validation :
 
-- `codex -p cli-lean mcp list --json` : `kicad-agentic-mcp enabled=false`,
-  `node_repl enabled=false` — plus aucun MCP actif en session de coding.
-- `codex -p cli-kicad mcp list --json` : `kicad-agentic-mcp` et `konnect`
-  restent `enabled=true`. Configuration de base inchangée, donc Codex Desktop
-  intact.
-- Coût de découverte évité, mesuré en interrogeant le serveur en JSON-RPC
-  (`tools/list`) : 21 outils, 13 256 caractères de schémas. Le contexte de
-  démarrage mesuré par `prompt-input` est inchangé à 24 748 caractères — les
-  schémas d'outils n'y transitent pas.
-- Symétrie confirmée : côté Claude, aucun `mcpServers` global ; l'agent
-  `kicad-control` porte `konnect` dans son propre en-tête.
+- `cli-lean` désactive les cinq skills système sans usage en coding — `imagegen`,
+  `openai-docs`, `plugin-creator`, `skill-creator`, `skill-installer`. Contexte
+  de démarrage : 24 748 → 22 616 caractères, 8 → 3 skills visibles, les trois
+  restants étant `local-worker`, `noa-local-agents` et `project-continuity`.
+- Base intacte : `codex debug prompt-input` sans profil rend toujours 18 skills,
+  donc Codex Desktop et les sessions de maintenance conservent tout.
+- `codex doctor --summary` : 21 ok, 0 fail.
+- Deux surfaces mesurées et laissées en place faute de gain : le bloc
+  `<recommended_plugins>` de 3 336 caractères ne cède ni à
+  `features.recommended_plugins = false` ni à la désactivation du marketplace
+  distant, qui l'aggrave à 26 210 caractères ; les treize plugins du catalogue
+  distant n'ajoutent rien au contexte mesuré.
 
 ## Décisions actives
 
@@ -62,7 +63,8 @@ Validation :
   signal de levée est le test I6.3, à rejouer dès que le quota le permet.
 - Le wrapper `codex` est une fonction du profil PowerShell : hors d'un shell
   PowerShell l'ayant chargé — depuis Git Bash ou un autre agent — `codex` et
-  `codex exec` retombent sur la configuration de base, sans profil lean.
+  `codex exec` retombent sur la configuration de base, sans profil lean. Tout
+  appel hors PowerShell porte donc `-p cli-lean` explicitement, H3 compris.
 - Point de retour : tag `pre-parity-refactor-20260907` ; configuration live
   sauvegardée dans `C:\Users\FlowUP\.stack-backups\20260907-parity`.
 
@@ -85,8 +87,6 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I5.1 — établir ce qui reste réellement chargé sous `cli-lean` : les huit skills
-visibles, le bloc `<recommended_plugins>` de 3 336 caractères et les treize
-plugins du catalogue distant marqués « installed, enabled ». Déterminer par
-mesure lesquels sont réductibles sans casser Codex Desktop, puis ne couper que
-ceux dont le gain est mesuré.
+I7.1 — rejouer la baseline I4 à l'identique — `codex [-p <profil>] debug
+prompt-input` sur les trois configurations, plus `mcp list --json` — puis
+consigner l'écart mesuré et décider si les unités I8 à I11 gardent un objet.

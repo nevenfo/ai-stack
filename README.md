@@ -71,6 +71,13 @@ le défaut persisté et le dernier choix de session — un `/model sonnet` ponct
 devient le nouveau défaut. C'est ainsi que le miroir a affirmé `sonnet` alors
 que la stack visait `opus`.
 
+Côté Codex, le profil de coding `cli-lean` n'est appliqué que par la fonction
+`codex` du profil PowerShell. Un appel venu d'ailleurs — Git Bash, un script, un
+autre agent — retombe sur la configuration de base, avec ses plugins, ses skills
+système et ses serveurs MCP. Hors PowerShell, le profil se passe explicitement :
+`codex -p cli-lean exec …`. Seules les commandes runtime, `codex mcp` et
+`codex debug prompt-input` acceptent `--profile`.
+
 Le contrat commun ne s'édite que dans `agents/CONTRACT.md`, jamais directement dans
 un harness : `parity.sh` rattraperait la modification à la vérification suivante.
 

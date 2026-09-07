@@ -497,10 +497,10 @@ I4.
 
 ### Tâches
 
-- [ ] I5.1 Confirmer l'état effectif des surfaces candidates avant toute coupe.
-- [ ] I5.2 Retirer du chemin CLI les surfaces inutiles au coding principal.
-- [ ] I5.3 Préserver Codex Desktop et toute capacité réellement utilisée.
-- [ ] I5.4 Préférer une base lean plus des profils spécialisés si cela ne casse
+- [x] I5.1 Confirmer l'état effectif des surfaces candidates avant toute coupe.
+- [x] I5.2 Retirer du chemin CLI les surfaces inutiles au coding principal.
+- [x] I5.3 Préserver Codex Desktop et toute capacité réellement utilisée.
+- [x] I5.4 Préférer une base lean plus des profils spécialisés si cela ne casse
       pas Desktop.
 
 ### Validation
