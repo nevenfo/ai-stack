@@ -8,21 +8,25 @@ quota Codex.
 
 ## Tâche actuelle
 
-I4 — mesurer la configuration Codex réellement effective, avant toute coupe.
+I6 — retirer `kicad-agentic-mcp` du principal Codex, puis I5 pour les surfaces
+restantes.
 
 ## Dernière tâche validée
 
-I3 — `continuity-check.sh` couvre désormais le contrat de `progress.md`.
+I4 — baseline de la configuration Codex effective, mesurée sur le client
+`codex-cli 0.153.4`.
 
 Validation :
 
-- `bash ~/.agents/continuity-fixtures.sh` : `pass=4 fail=0`. Les trois fixtures
-  dégradées échouent en exit 1, la conforme passe en exit 0, et chacune échoue
-  sur sa seule cause — le test rejette une fixture qui produirait plus d'un
-  `FAIL`.
-- `bash ~/.agents/continuity-check.sh .` : `CONTINUITÉ STRUCTURELLE OK`, dont
-  « section « Tâche actuelle » » et « preuve de la dernière tâche validée ».
-- `bash ~/.agents/parity.sh` : `PARITÉ OK`, miroir compris.
+- Instrument : `codex [-p <profil>] debug prompt-input "t"`, qui rend le contexte
+  réellement visible par le modèle sans consommer de quota. Mesure rejouée après
+  chargement du catalogue distant : contexte identique, donc stable.
+- Contexte de démarrage dans `~/ai-stack` : base 31 943 caractères et 18 skills ;
+  `cli-lean` 24 745 et 8 skills ; `cli-kicad` 24 745 et 8 skills.
+- Sous `cli-lean`, `node_repl` est bien désactivé mais `kicad-agentic-mcp` reste
+  `enabled=true` : la base le déclare et aucun profil ne le désactive.
+- Aucune configuration actuelle ne reproduit l'avertissement de budget de skills,
+  y compris `caveman` réactivé (38 skills, 36 786 caractères).
 
 ## Décisions actives
 
@@ -45,6 +49,15 @@ Validation :
   compris ; `continuity-check.sh` le vérifie et reste volontairement strict.
 - Aucune métrique de contexte ou de quota inventée. Chaque unité de la phase I
   est indépendante et réversible.
+- Un profil Codex se **superpose** à la base (`-p` : « layer on top of the base
+  user config ») : il ne masque que les tables qu'il redéfinit. Tout ce que la
+  base déclare et que le profil ignore reste actif.
+- `codex debug prompt-input` est l'instrument de mesure de la phase I. Les
+  options globales, `-p` compris, doivent précéder `debug` ; `-c` ne surcharge
+  pas une clé de plugin comportant un `@`.
+- Le wrapper `codex` est une fonction du profil PowerShell : hors d'un shell
+  PowerShell l'ayant chargé — depuis Git Bash ou un autre agent — `codex` et
+  `codex exec` retombent sur la configuration de base, sans profil lean.
 - Point de retour : tag `pre-parity-refactor-20260907` ; configuration live
   sauvegardée dans `C:\Users\FlowUP\.stack-backups\20260907-parity`.
 
@@ -67,8 +80,7 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I4.1 — établir comment la version Codex installée charge et fusionne
-`config.toml` et les profils `cli-lean` / `cli-kicad` : lire l'aide et la
-documentation du client installé, puis relever sur une session réelle les
-plugins actifs, les MCP visibles et les skills visibles, sans rien supposer de
-l'effet d'un `enabled = false` sur une table héritée.
+I6.1 — désactiver `kicad-agentic-mcp` dans `cli-lean.config.toml`, vérifier par
+`codex -p cli-lean mcp list --json` qu'il passe à `enabled=false` alors qu'il
+reste actif sous `cli-kicad`, puis mesurer le contexte avant/après par
+`codex -p cli-lean debug prompt-input`.

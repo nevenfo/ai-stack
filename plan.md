@@ -472,12 +472,12 @@ Aucune.
 
 ### Tâches
 
-- [ ] I4.1 Déterminer comment la version installée charge et fusionne les profils.
-- [ ] I4.2 Relever plugins actifs, MCP visibles, skills visibles, outils exposés.
-- [ ] I4.3 Vérifier si `codex exec` emprunte réellement le profil lean.
-- [ ] I4.4 Expliquer l'avertissement « Skill descriptions were shortened to fit
+- [x] I4.1 Déterminer comment la version installée charge et fusionne les profils.
+- [x] I4.2 Relever plugins actifs, MCP visibles, skills visibles, outils exposés.
+- [x] I4.3 Vérifier si `codex exec` emprunte réellement le profil lean.
+- [x] I4.4 Expliquer l'avertissement « Skill descriptions were shortened to fit
       the skills context budget ».
-- [ ] I4.5 Consigner une baseline compacte, sans estimation fabriquée.
+- [x] I4.5 Consigner une baseline compacte, sans estimation fabriquée.
 
 ### Validation
 
