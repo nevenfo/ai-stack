@@ -617,7 +617,7 @@ I7.
 
 ### Tâches
 
-- [ ] I10.1 Construire un corpus reproductible : modification ciblée, bug
+- [x] I10.1 Construire un corpus reproductible : modification ciblée, bug
       multi-fichiers, feature moyenne, exploration, review, reprise de continuité.
 - [ ] I10.2 Exécuter à dépôt, commit, prompt et validations identiques.
 - [ ] I10.3 Relever uniquement les données réellement exposées : tokens, durée,
@@ -643,10 +643,10 @@ I7, I10.
 
 ### Tâches
 
-- [ ] I11.1 Mesurer fréquence d'activation, coût réel au chargement et redondance
+- [x] I11.1 Mesurer fréquence d'activation, coût réel au chargement et redondance
       exacte avec le bloc permanent.
-- [ ] I11.2 Ne produire une version candidate que si le gain le justifie.
-- [ ] I11.3 Conserver la version actuelle si le gain est faible ou la fiabilité
+- [x] I11.2 Ne produire une version candidate que si le gain le justifie.
+- [x] I11.3 Conserver la version actuelle si le gain est faible ou la fiabilité
       baisse.
 
 ### Validation

@@ -8,27 +8,28 @@ quota Codex.
 
 ## Tâche actuelle
 
-I10.1 — construire le corpus reproductible du benchmark High contre Medium.
+Phase I close pour ce qui est mesurable sans quota. Reste I6.3, I7.3, I10.2 à
+I10.4 et H3, tous suspendus au retour du quota Codex.
 
 ## Dernière tâche validée
 
-I8 et I9 — deux hypothèses d'optimisation mesurées, aucune n'ouvre de gain.
+I10.1 et I11 — corpus du benchmark d'effort livré, compaction du skill écartée.
 
 Validation :
 
-- `caveman` : coût de découverte nul, mesuré. Côté Claude, aucune entrée dans
-  `~/.claude/skills/` et `caveman@caveman: false` ; côté Codex, plugin
-  `enabled = false` et `[[skills.config]]` désactivé. Réactivé pour la mesure, il
-  coûterait 20 skills et 4 840 caractères. Sa fonction — dégrader la syntaxe pour
-  compresser la sortie — entre de surcroît en conflit avec le contrat, qui exige
-  une réponse française correcte et la préservation exacte des identifiants.
-  Aucune découverte active ne subsiste à retirer ; `parity.sh` interdit désormais
-  toute réactivation silencieuse des deux côtés.
-- Sous-agents fermés : `code-worker` lancé pour observation rapporte n'avoir ni
-  catalogue de skills, ni instruction de délégation, ni outil Web — seulement
-  `Read, Edit, Write, Bash, Grep, Glob`. Le harness n'injecte donc rien à
-  retirer ; l'hypothèse est infirmée côté Claude. Coût relevé par le harness :
-  13 871 tokens pour ce lancement, sans appel d'outil.
+- `bash ~/.agents/effort-bench/build-fixtures.sh <dossier>` construit six dépôts
+  Git figés. Les six échouent à l'état initial, et chacune passe avec une
+  solution de référence appliquée puis annulée : le corpus est à la fois non
+  trivial et résoluble.
+- Un défaut du corpus a été trouvé et corrigé avant livraison : `t2` passait
+  d'emblée, les deux ordres de calcul coïncidant sur des montants
+  proportionnels. Le cas discriminant est 450, où le seuil de remise n'est
+  franchi qu'après la TVA.
+- I11 : le skill `project-continuity` ne pèse en permanence que sa description,
+  484 caractères sur 22 613. Son texte complet, 10 767 caractères, n'est chargé
+  qu'à la demande, et la section permanente qu'il prolonge en fait 1 104. Le
+  gain d'une compaction est donc faible et porterait sur le seul mécanisme qui
+  garantit preflight, réparation et handoff : version actuelle conservée.
 
 ## Décisions actives
 
@@ -86,13 +87,18 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 - Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`.
 - Profils Codex : `~/.codex/config.toml` plus `codex/cli-lean.config.toml` et
   `codex/cli-kicad.config.toml` dans le miroir.
+- Corpus du benchmark d'effort : `agents/effort-bench/`, protocole et
+  générateur de fixtures.
 - Dépôt : `agents/`, `README.md` (matrice de parité), `AGENTS.md` (contrat export).
 - Fixtures H3 : `%TEMP%/claude/.../scratchpad/parity-tests/`.
 
 ## NEXT ACTION
 
-I10.1 — écrire dans le dépôt le corpus reproductible du benchmark High contre
-Medium : six tâches — modification ciblée, bug multi-fichiers, feature moyenne,
-exploration, review, reprise de continuité — avec pour chacune un dépôt de
-départ figé, un prompt littéral et une validation exécutable. Ne rien exécuter
-côté Codex avant le retour du quota.
+H3.1 — dès la réinitialisation du quota Codex, annoncée au 2026-09-12 09:20,
+lancer la reprise de la fixture `t1-claude-init` par
+`codex -p cli-lean exec -C <fixture> -s workspace-write "Ce dossier est un bac à
+sable de test : ne crée aucun dépôt distant. Continue."` et vérifier
+`pass=6 fail=0`, un arbre propre et `continuity-check` OK. Enchaîner H3.2 à
+H3.4, puis I6.3, I7.3 et le benchmark I10.2 à I10.4 sur le corpus déjà
+construit. Si les fixtures H3 ont expiré, les recréer selon la description de
+H3 avant de lancer.
