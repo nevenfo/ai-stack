@@ -401,10 +401,10 @@ Aucune.
 
 ### Tâches
 
-- [ ] I1.1 Établir l'état live effectif : couches de settings applicables,
+- [x] I1.1 Établir l'état live effectif : couches de settings applicables,
       variables d'environnement, modèle réellement servi à la session.
-- [ ] I1.2 Corriger le côté réellement faux, sans arbitrage arbitraire.
-- [ ] I1.3 Représenter explicitement, si elle existe, la distinction entre modèle
+- [x] I1.2 Corriger le côté réellement faux, sans arbitrage arbitraire.
+- [x] I1.3 Représenter explicitement, si elle existe, la distinction entre modèle
       par défaut persisté et modèle choisi en session.
 
 ### Validation
@@ -425,10 +425,10 @@ I1.
 
 ### Tâches
 
-- [ ] I2.1 Ajouter des contrôles sémantiques ciblés — modèle et effort Claude,
+- [x] I2.1 Ajouter des contrôles sémantiques ciblés — modèle et effort Claude,
       modèle et effort Codex, états critiques de plugins/MCP, identité du bloc
       canonique — sans comparaison brute des fichiers.
-- [ ] I2.2 Test négatif : une divergence artificielle du miroir fait échouer le
+- [x] I2.2 Test négatif : une divergence artificielle du miroir fait échouer le
       contrôle, dans les deux sens.
 
 ### Validation

@@ -57,6 +57,20 @@ bash agents/parity.sh          # vérifie ; sort en erreur si un côté a diverg
 bash agents/parity.sh --fix    # réinjecte le bloc canonique dans les deux
 ```
 
+Le contrôle porte sur les deux configurations live **et** sur ce dépôt. Il ne
+compare pas les fichiers brut à brut — le miroir normalise volontairement les
+chemins de projets et les empreintes machine — mais il exige l'identité des
+fichiers du socle et l'égalité des valeurs sémantiques critiques : modèle et
+effort des deux côtés, états critiques de plugins et de MCP. Un miroir périmé
+échoue donc au même titre qu'un harness qui dérive. `PARITY_MIRROR` désigne le
+dépôt si celui-ci ne se trouve pas dans `~/ai-stack`.
+
+Attention à une source de dérive : côté Claude Code, `/model` écrit le modèle
+choisi dans `~/.claude/settings.json` et l'y laisse. Ce champ est donc à la fois
+le défaut persisté et le dernier choix de session — un `/model sonnet` ponctuel
+devient le nouveau défaut. C'est ainsi que le miroir a affirmé `sonnet` alors
+que la stack visait `opus`.
+
 Le contrat commun ne s'édite que dans `agents/CONTRACT.md`, jamais directement dans
 un harness : `parity.sh` rattraperait la modification à la vérification suivante.
 
