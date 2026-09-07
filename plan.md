@@ -294,7 +294,7 @@ E1, F1.
 
 - [x] G1.1 Resynchroniser `claude/`, `codex/`, `shared/` et le dossier `agents/`.
 - [x] G1.2 Relire le diff complet et vérifier l'absence de secret.
-- [ ] G1.3 Commit ciblé, push, puis intégration dans `main`.
+- [x] G1.3 Commit ciblé, push, puis intégration dans `main`.
 
 ### Validation
 

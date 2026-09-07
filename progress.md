@@ -7,29 +7,22 @@ Phase H — parité prouvée. Branche `ai/claude-codex-parity`, partie de `main`
 
 ## Tâche actuelle
 
-G1.3 — intégrer la branche dans `main`.
+H3 — tests de reprise croisée côté Codex, en attente de quota.
 
 ## Dernière tâche validée
 
-H2 — les six scénarios de reprise côté Claude Code, sur dépôts jetables.
+G1 — le miroir reflète l'état live des deux harnesses, et `main` porte la refonte.
 
 Validation :
 
-- `t1b-claude-resume` : un processus Claude Code sans contexte reprend une fixture
-  initialisée par Claude Code, corrige un `progress.md` qui annonçait « 4 cas sur
-  5 » pour un réel 3 sur 5, livre A1.2 puis enchaîne A2.1 sans s'arrêter.
-  Résultat : `pass=6 fail=0`, trois commits, arbre propre, `continuity-check` OK.
-- `t5c-claude-retest` : fixture dégradée — plan sans `Objectif`/`Dépendances`/
-  `Validation`, `progress.md` annonçant « tests au vert » pour un `fail=1`,
-  `NEXT ACTION` renvoyant à une phase inexistante. Réparée : `pass=6 fail=0`,
-  unité normalisée aux quatre sections, `NEXT ACTION` unique, arrêt sur décision
-  de périmètre. `continuity-check` OK.
-- Défaut trouvé puis corrigé : à la première passe (`t5b-claude`), les intitulés
-  de sections avaient été désaccentués — `### Dependances`, `## Decisions
-  actives`. Ce sont des ancres de handoff ; le skill impose désormais des
-  intitulés littéraux et invariants. Le rejeu confirme la correction.
-- Aucun dépôt distant créé dans les bacs à sable ; l'absence de checkpoint durable
-  est consignée dans le `progress.md` de chaque fixture.
+- PR `nevenfo/ai-stack#1` fusionnée ; `main` distant est à `4c67e94`, arbre local
+  propre, branche de travail supprimée.
+- Diff relu avant chaque commit, aucun secret ni empreinte machine ajoutés.
+- `bash agents/parity.sh` : `PARITÉ OK`. `bash agents/continuity-check.sh .` :
+  `CONTINUITÉ STRUCTURELLE OK`.
+- Claude confirmé sur `opus` + `effortLevel: high` (`~/.claude/settings.json`,
+  `CLAUDE_EFFORT=high` dans l'environnement). Aucun autre fichier de settings ne
+  contredit ce réglage.
 
 ## Décisions actives
 
@@ -66,6 +59,9 @@ utilisateur.
 
 ## NEXT ACTION
 
-G1.3 — ouvrir la pull request de `ai/claude-codex-parity` vers `main` sur
-`nevenfo/ai-stack`, la fusionner après relecture du diff complet, puis vérifier
-que `main` distant porte bien la refonte.
+H3.1 — dès la réinitialisation du quota Codex (annoncée au 2026-09-12 09:20),
+lancer `codex exec -C <scratchpad>/parity-tests/t1-claude-init -s workspace-write
+"Ce dossier est un bac à sable de test : ne crée aucun dépôt distant. Continue."`
+et vérifier `pass=6 fail=0`, un arbre propre et `continuity-check` OK, puis
+enchaîner H3.2 à H3.4. Si le scratchpad de session a expiré, recréer les fixtures
+selon la description de H3 avant de lancer.
