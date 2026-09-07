@@ -1,6 +1,22 @@
 # Livraison Git/GitHub
 
-Charger cette référence seulement pour une livraison impliquant branche, push, pull request, merge, protection, conflit, publication complexe, nettoyage ou `--force-with-lease`.
+Charger cette référence seulement pour une livraison impliquant branche, push, pull request, merge, protection, conflit, publication complexe, nettoyage, `--force-with-lease` ou l'initialisation GitHub d'un projet sans remote.
+
+## Initialisation GitHub
+
+Tout vrai projet persistant a un remote GitHub. Un dossier jetable, un bac à sable ou un fixture de test n'en est pas un.
+
+Remote déjà présent : vérifier `origin`, ne pas le remplacer, ne pas toucher à la visibilité du dépôt, et poursuivre.
+
+Remote absent :
+
+1. `gh --version` puis `gh auth status`. Absent ou non authentifié : Git local continue, l'initialisation GitHub est `BLOCKED`, et l'utilisateur est informé — ne jamais installer `gh` ni lancer un login interactif.
+2. Vérifier qu'aucun dépôt du compte ne correspond déjà au projet ; un doublon est pire que l'absence de remote.
+3. Vérifier qu'aucun secret, credential, `.env`, clé ou empreinte machine ne serait poussé. Un `.gitignore` adapté précède le premier commit.
+4. Créer le dépôt **privé**, sans exception : `gh repo create <nom> --private --source . --remote origin`. Ne jamais créer public, ne jamais faire passer un dépôt existant en public.
+5. Premier commit ciblé — `plan.md`, `progress.md` et le contenu réel du projet — puis `git push -u origin <branche>`.
+
+La création d'un dépôt privé pour un vrai projet persistant nouveau est une action autonome. Rendre un dépôt public, transférer, archiver ou supprimer un dépôt exige une décision utilisateur.
 
 ## État initial et ownership
 
