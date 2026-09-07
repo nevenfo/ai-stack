@@ -42,12 +42,6 @@ last_updated = "2026-08-08T13:24:25Z"
 source_type = "local"
 source = '\${USERPROFILE}\.cache\codex-runtimes\codex-primary-runtime\plugins\openai-primary-runtime'
 
-[marketplaces.caveman]
-last_updated = "2026-08-27T16:51:22Z"
-last_revision = "17f9f2ec2377b0bfe16b52ee03a462e7f0a02bc8"
-source_type = "git"
-source = "https://github.com/JuliusBrussee/caveman.git"
-
 [plugins."browser@openai-bundled"]
 enabled = true
 
@@ -72,9 +66,6 @@ enabled = true
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
-[plugins."caveman@caveman"]
-enabled = false
-
 [features]
 js_repl = false
 
@@ -89,11 +80,6 @@ sandbox = "elevated"
 [desktop]
 followUpQueueMode = "queue"
 conversationDetailMode = "STEPS_COMMANDS"
-
-# Codex already receives the equivalent caveman skill from the enabled plugin.
-[[skills.config]]
-path = 'C:\Users\FlowUP\.agents\skills\caveman\SKILL.md'
-enabled = false
 
 [mcp_servers.node_repl]
 command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
