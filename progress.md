@@ -8,27 +8,26 @@ quota Codex.
 
 ## Tâche actuelle
 
-I7 — mesure intermédiaire : rejouer la baseline I4 et décider si une
-optimisation plus agressive reste justifiée.
+I8 — arbitrage `caveman` : mesurer son coût de découverte réel des deux côtés
+avant toute décision.
 
 ## Dernière tâche validée
 
-I5 — le profil de coding Codex ne charge plus que ce qui sert au coding.
+I7 — mesure intermédiaire, baseline I4 rejouée à l'identique.
 
 Validation :
 
-- `cli-lean` désactive les cinq skills système sans usage en coding — `imagegen`,
-  `openai-docs`, `plugin-creator`, `skill-creator`, `skill-installer`. Contexte
-  de démarrage : 24 748 → 22 616 caractères, 8 → 3 skills visibles, les trois
-  restants étant `local-worker`, `noa-local-agents` et `project-continuity`.
-- Base intacte : `codex debug prompt-input` sans profil rend toujours 18 skills,
-  donc Codex Desktop et les sessions de maintenance conservent tout.
-- `codex doctor --summary` : 21 ok, 0 fail.
-- Deux surfaces mesurées et laissées en place faute de gain : le bloc
-  `<recommended_plugins>` de 3 336 caractères ne cède ni à
-  `features.recommended_plugins = false` ni à la désactivation du marketplace
-  distant, qui l'aggrave à 26 210 caractères ; les treize plugins du catalogue
-  distant n'ajoutent rien au contexte mesuré.
+- Session de coding, `cli-lean` : 24 748 → 22 613 caractères, 8 → 3 skills,
+  2 → 0 MCP actifs, plus les 21 outils et 13 256 caractères de schémas du MCP
+  KiCad qui ne sont plus découverts.
+- Base inchangée à 31 943 caractères, 18 skills, 2 MCP : Codex Desktop intact.
+  `cli-kicad` inchangé à 24 745 caractères, `kicad-agentic-mcp` et `konnect`
+  toujours actifs.
+- Aucun avertissement de budget de skills dans aucune des trois configurations.
+- `project-continuity` reste visible sous `cli-lean` avec sa description
+  entière, non tronquée, et `[agents] enabled = true`.
+- Reste non mesuré faute de quota : le comportement réel d'une session de
+  coding, d'une délégation et d'une tâche KiCad. C'est I7.3, à rejouer avec H3.
 
 ## Décisions actives
 
@@ -49,6 +48,10 @@ Validation :
   valeur de la preuve.
 - Les intitulés de sections de `plan.md`/`progress.md` sont littéraux, accents
   compris ; `continuity-check.sh` le vérifie et reste volontairement strict.
+- La pression de contexte constatée en début de phase a disparu : plus aucun
+  avertissement de budget, et le contexte de coding restant est surtout le
+  contrat lui-même. Les unités I8 à I11 ne se mènent donc que si une mesure leur
+  donne un objet.
 - Aucune métrique de contexte ou de quota inventée. Chaque unité de la phase I
   est indépendante et réversible.
 - Un profil Codex se **superpose** à la base (`-p` : « layer on top of the base
@@ -87,6 +90,7 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I7.1 — rejouer la baseline I4 à l'identique — `codex [-p <profil>] debug
-prompt-input` sur les trois configurations, plus `mcp list --json` — puis
-consigner l'écart mesuré et décider si les unités I8 à I11 gardent un objet.
+I8.1 — mesurer le coût de découverte actuel de `caveman` des deux côtés :
+vérifier qu'aucun plugin n'est actif et qu'aucun skill n'est découvert, puis
+comparer au coût mesuré lorsqu'il est réactivé — +20 skills et 4 840 caractères
+côté Codex — pour décider s'il reste quelque chose à retirer.

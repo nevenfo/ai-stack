@@ -547,8 +547,8 @@ I5, I6.
 
 ### Tâches
 
-- [ ] I7.1 Rejouer exactement la baseline I4.
-- [ ] I7.2 Comparer et consigner les écarts réellement mesurés.
+- [x] I7.1 Rejouer exactement la baseline I4.
+- [x] I7.2 Comparer et consigner les écarts réellement mesurés.
 - [ ] I7.3 Vérifier coding, continuité, délégation simple et KiCad via agent.
 
 ### Validation
