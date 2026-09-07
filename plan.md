@@ -377,3 +377,279 @@ H2. Quota Codex disponible — épuisé le 2026-09-07, réinitialisation annonc�
 
 Mêmes preuves qu'en H2, plus une comparaison des états produits par les deux
 harnesses sur la même fixture de départ.
+
+---
+
+# Phase I — Optimisation Pareto de la stack
+
+Passe d'optimisation menée après la parité. Chaque unité est indépendante et
+réversible : état avant, hypothèse, changement minimal, validation, résultat
+mesuré, décision KEEP ou REVERT. Aucune métrique n'est affirmée sans mesure
+réelle exposée par le client. L'architecture Claude/Codex pairs n'est pas remise
+en cause. Antigravity n'est pas réintroduit.
+
+## I1 — Vérité du modèle Claude
+
+### Objectif
+
+Supprimer toute affirmation contradictoire sur le modèle et l'effort Claude entre
+la configuration live, le miroir, `README.md`, `progress.md` et `parity.sh`.
+
+### Dépendances
+
+Aucune.
+
+### Tâches
+
+- [x] I1.1 Établir l'état live effectif : couches de settings applicables,
+      variables d'environnement, modèle réellement servi à la session.
+- [x] I1.2 Corriger le côté réellement faux, sans arbitrage arbitraire.
+- [x] I1.3 Représenter explicitement, si elle existe, la distinction entre modèle
+      par défaut persisté et modèle choisi en session.
+
+### Validation
+
+Live, miroir, `README.md`, `progress.md` et `parity.sh` affirment la même chose ;
+`bash agents/parity.sh` reste `PARITÉ OK` ; aucune valeur non observée.
+
+## I2 — `parity.sh` détecte un miroir périmé
+
+### Objectif
+
+Le contrôle doit échouer quand le miroir Git représente autre chose que le live
+sur les invariants critiques, dans les deux sens.
+
+### Dépendances
+
+I1.
+
+### Tâches
+
+- [x] I2.1 Ajouter des contrôles sémantiques ciblés — modèle et effort Claude,
+      modèle et effort Codex, états critiques de plugins/MCP, identité du bloc
+      canonique — sans comparaison brute des fichiers.
+- [x] I2.2 Test négatif : une divergence artificielle du miroir fait échouer le
+      contrôle, dans les deux sens.
+
+### Validation
+
+Sortie lisible, code de retour non nul en cas de divergence, test négatif probant,
+aucun moteur d'export ni manifeste introduit.
+
+## I3 — `continuity-check.sh` couvre le contrat de `progress.md`
+
+### Objectif
+
+Le contrôle structurel vérifie réellement le contrat, pas seulement une partie.
+
+### Dépendances
+
+Aucune.
+
+### Tâches
+
+- [x] I3.1 Exiger `## Tâche actuelle`.
+- [x] I3.2 Exiger une preuve non vide sous `## Dernière tâche validée`.
+- [x] I3.3 Conserver l'unicité de `## NEXT ACTION`.
+- [x] I3.4 Fixtures : `Tâche actuelle` absente, preuve absente, deux
+      `NEXT ACTION`, et un snapshot conforme.
+
+### Validation
+
+Les trois fixtures dégradées échouent, la fixture conforme passe, le script reste
+un contrôle ciblé et non un analyseur Markdown généraliste.
+
+## I4 — Baseline de la configuration Codex effective
+
+### Objectif
+
+Mesurer avant d'optimiser : ce que charge réellement une session Codex, prouvé et
+non supposé.
+
+### Dépendances
+
+Aucune.
+
+### Tâches
+
+- [x] I4.1 Déterminer comment la version installée charge et fusionne les profils.
+- [x] I4.2 Relever plugins actifs, MCP visibles, skills visibles, outils exposés.
+- [x] I4.3 Vérifier si `codex exec` emprunte réellement le profil lean.
+- [x] I4.4 Expliquer l'avertissement « Skill descriptions were shortened to fit
+      the skills context budget ».
+- [x] I4.5 Consigner une baseline compacte, sans estimation fabriquée.
+
+### Validation
+
+Chaque élément de la baseline provient d'une sortie réelle du client installé ;
+les valeurs non mesurables sont déclarées non mesurées.
+
+## I5 — Codex lean par défaut pour le coding
+
+### Objectif
+
+Une session de coding ne charge que ce qui sert à presque toutes les tâches ; les
+capacités lourdes restent disponibles à la demande.
+
+### Dépendances
+
+I4.
+
+### Tâches
+
+- [x] I5.1 Confirmer l'état effectif des surfaces candidates avant toute coupe.
+- [x] I5.2 Retirer du chemin CLI les surfaces inutiles au coding principal.
+- [x] I5.3 Préserver Codex Desktop et toute capacité réellement utilisée.
+- [x] I5.4 Préférer une base lean plus des profils spécialisés si cela ne casse
+      pas Desktop.
+
+### Validation
+
+Session de coding fonctionnelle, agents fonctionnels, `project-continuity`
+détectable, aucune perte de fonction, avertissement de budget de skills disparu
+si techniquement possible.
+
+## I6 — KiCad hors du principal Codex
+
+### Objectif
+
+Le principal délègue à `kicad-control`, qui porte seul le MCP KiCad.
+
+### Dépendances
+
+I4.
+
+### Tâches
+
+- [x] I6.1 Établir si l'exposition globale du MCP KiCad est encore imposée par la
+      limitation d'héritage MCP des sous-agents.
+- [x] I6.2 Retirer l'exposition globale, ou la restreindre strictement aux
+      profils KiCad avec la raison exacte et le signal de levée du contournement.
+- [ ] I6.3 Sous quota Codex, prouver fonctionnellement qu'une tâche KiCad
+      aboutit encore via l'agent `kicad-control`, profil `cli-kicad`.
+
+### Validation
+
+Session de coding sans MCP KiCad visible, tâche KiCad fonctionnelle via
+`kicad-control`, aucune perte de capacité, coût de découverte mesuré avant et
+après si le client l'expose.
+
+## I7 — Mesure intermédiaire
+
+### Objectif
+
+Comparer la baseline I4 après les unités I1 à I6, et décider si une optimisation
+plus agressive reste justifiée.
+
+### Dépendances
+
+I5, I6.
+
+### Tâches
+
+- [x] I7.1 Rejouer exactement la baseline I4.
+- [x] I7.2 Comparer et consigner les écarts réellement mesurés.
+- [ ] I7.3 Vérifier coding, continuité, délégation simple et KiCad via agent.
+
+### Validation
+
+Aucun gain chiffré affirmé sans mesure ; si la pression de contexte a disparu,
+les unités suivantes sont réévaluées plutôt que menées par principe.
+
+## I8 — Arbitrage `caveman`
+
+### Objectif
+
+Déterminer si `caveman` apporte encore une fonction distincte de la concision déjà
+imposée par le contrat canonique.
+
+### Dépendances
+
+I7.
+
+### Tâches
+
+- [x] I8.1 Comparer sa fonction au contrat canonique et mesurer son coût de
+      découverte.
+- [x] I8.2 Retirer sa découverte active si la valeur nette est nulle, sans laisser
+      de plugin actif.
+
+### Validation
+
+Aucun plugin Caveman actif, décision fondée sur une mesure et non sur
+l'affirmation de gain du skill lui-même.
+
+## I9 — Catalogue de skills des sous-agents fermés
+
+### Objectif
+
+Tester si un sous-agent interdit de délégation, de Web, de MCP ou de skills peut
+démarrer avec un catalogue réduit.
+
+### Dépendances
+
+I7.
+
+### Tâches
+
+- [x] I9.1 Mesurer le contexte initial de `code-worker`, `second-brain` et
+      `web-research`.
+- [x] I9.2 Vérifier si le harness injecte ces descriptions de façon nécessaire au
+      respect du contrat.
+- [x] I9.3 Adopter la réduction seulement si le gain est net et le comportement
+      identique.
+
+### Validation
+
+Réussite, respect des interdictions et différence de tokens mesurés ; aucune
+suppression si l'injection est nécessaire.
+
+## I10 — Benchmark High contre Medium
+
+### Objectif
+
+Décider du niveau d'effort par défaut sur des données réelles, séparément pour
+Claude et pour Codex. Le défaut reste `high` tant que la preuve manque.
+
+### Dépendances
+
+I7.
+
+### Tâches
+
+- [x] I10.1 Construire un corpus reproductible : modification ciblée, bug
+      multi-fichiers, feature moyenne, exploration, review, reprise de continuité.
+- [ ] I10.2 Exécuter à dépôt, commit, prompt et validations identiques.
+- [ ] I10.3 Relever uniquement les données réellement exposées : tokens, durée,
+      appels d'outils, tours, PASS/FAIL, corrections, tests, qualité du snapshot.
+- [ ] I10.4 Décider ; `medium` ne devient le défaut qu'en cas d'économie
+      significative sans baisse mesurable.
+
+### Validation
+
+Décision appuyée sur l'ensemble du corpus, jamais sur un seul test ; conservation
+de `high` si la preuve est insuffisante.
+
+## I11 — Compaction éventuelle de `project-continuity`
+
+### Objectif
+
+N'envisager une version plus compacte du skill que si un gain significatif reste
+disponible après I7 et I10.
+
+### Dépendances
+
+I7, I10.
+
+### Tâches
+
+- [x] I11.1 Mesurer fréquence d'activation, coût réel au chargement et redondance
+      exacte avec le bloc permanent.
+- [x] I11.2 Ne produire une version candidate que si le gain le justifie.
+- [x] I11.3 Conserver la version actuelle si le gain est faible ou la fiabilité
+      baisse.
+
+### Validation
+
+Toute version candidate réussit exactement les mêmes tests de continuité et de
+handoff que la version actuelle, fixtures H2 et H3 comprises.

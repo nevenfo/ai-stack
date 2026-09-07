@@ -8,7 +8,7 @@
       "Bash(C:\\Users\\FlowUP\\noa\\bin\\noa-agent.cmd:*)"
     ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {

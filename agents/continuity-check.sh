@@ -37,10 +37,25 @@ else
     [ "$body" -gt 0 ] && ok "NEXT ACTION non vide" || bad "NEXT ACTION vide"
   fi
 
-  for s in "## Phase actuelle" "## Dernière tâche validée" "## Décisions actives" \
-           "## Blocage actif" "## Fichiers / zones utiles"; do
+  for s in "## Phase actuelle" "## Tâche actuelle" "## Dernière tâche validée" \
+           "## Décisions actives" "## Blocage actif" "## Fichiers / zones utiles"; do
     grep -q "^$s" "$PROGRESS" && ok "section « ${s#\#\# } »" || bad "section manquante : « ${s#\#\# } »"
   done
+
+  # Une tâche déclarée validée sans preuve listée n'est pas validée. Le contrôle
+  # exige le marqueur littéral « Validation : » puis au moins une puce non vide ;
+  # il ne juge pas la valeur de la preuve, seulement son existence.
+  if grep -q '^## Dernière tâche validée[[:space:]]*$' "$PROGRESS"; then
+    sec=$(sed -n '/^## Dernière tâche validée[[:space:]]*$/,/^## /p' "$PROGRESS" | sed '1d')
+    if ! printf '%s\n' "$sec" | grep -qE '^Validation *:'; then
+      bad "dernière tâche validée sans « Validation : »"
+    else
+      proof=$(printf '%s\n' "$sec" | sed -n '/^Validation *:/,$p' | tail -n +2 \
+                | grep -cE '^[[:space:]]*[-*] +[^[:space:]]')
+      [ "$proof" -gt 0 ] && ok "preuve de la dernière tâche validée ($proof point(s))" \
+        || bad "« Validation : » ne liste aucune preuve"
+    fi
+  fi
 
   words=$(wc -w < "$PROGRESS")
   if   [ "$words" -gt 900 ]; then bad "snapshot trop long ($words mots) — il dérive vers le journal"

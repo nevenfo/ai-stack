@@ -53,9 +53,33 @@ premier, sans reconstruire son état à la main.
 | Web hors du principal | hook de refus | `web_search = "disabled"` | divergence légitime : deux mécanismes natifs |
 
 ```bash
-bash agents/parity.sh          # vérifie ; sort en erreur si un côté a divergé
-bash agents/parity.sh --fix    # réinjecte le bloc canonique dans les deux
+bash agents/parity.sh                   # vérifie ; sort en erreur si un côté a divergé
+bash agents/parity.sh --fix             # réinjecte le bloc canonique dans les deux
+bash agents/continuity-check.sh <dir>   # forme de plan.md / progress.md
+bash agents/continuity-fixtures.sh      # prouve que le contrôle ci-dessus sait échouer
+bash agents/effort-bench/build-fixtures.sh <dir>   # corpus du benchmark d'effort
 ```
+
+Le contrôle porte sur les deux configurations live **et** sur ce dépôt. Il ne
+compare pas les fichiers brut à brut — le miroir normalise volontairement les
+chemins de projets et les empreintes machine — mais il exige l'identité des
+fichiers du socle et l'égalité des valeurs sémantiques critiques : modèle et
+effort des deux côtés, états critiques de plugins et de MCP. Un miroir périmé
+échoue donc au même titre qu'un harness qui dérive. `PARITY_MIRROR` désigne le
+dépôt si celui-ci ne se trouve pas dans `~/ai-stack`.
+
+Attention à une source de dérive : côté Claude Code, `/model` écrit le modèle
+choisi dans `~/.claude/settings.json` et l'y laisse. Ce champ est donc à la fois
+le défaut persisté et le dernier choix de session — un `/model sonnet` ponctuel
+devient le nouveau défaut. C'est ainsi que le miroir a affirmé `sonnet` alors
+que la stack visait `opus`.
+
+Côté Codex, le profil de coding `cli-lean` n'est appliqué que par la fonction
+`codex` du profil PowerShell. Un appel venu d'ailleurs — Git Bash, un script, un
+autre agent — retombe sur la configuration de base, avec ses plugins, ses skills
+système et ses serveurs MCP. Hors PowerShell, le profil se passe explicitement :
+`codex -p cli-lean exec …`. Seules les commandes runtime, `codex mcp` et
+`codex debug prompt-input` acceptent `--profile`.
 
 Le contrat commun ne s'édite que dans `agents/CONTRACT.md`, jamais directement dans
 un harness : `parity.sh` rattraperait la modification à la vérification suivante.

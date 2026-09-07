@@ -42,11 +42,63 @@ enabled = false
 enabled = false
 
 [mcp_servers.node_repl]
-command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
+command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\f1bf3cd3a5929acd\bin\node_repl.exe'
+enabled = false
+
+# kicad-agentic-mcp est déclaré par la base, pour Codex Desktop et pour le
+# profil KiCad. Une session de coding n'en a aucun usage : elle délègue à
+# l'agent kicad-control, qui porte son propre MCP. Sans cette table le serveur
+# resterait actif, un profil ne masquant que ce qu'il redéfinit.
+[mcp_servers.kicad-agentic-mcp]
 enabled = false
 
 [shell_environment_policy.set]
 CLAUDE_CONFIG_DIR = 'C:\Users\FlowUP\.codex\rtk-cli'
 
+[projects.'c:\users\flowup\documents\etabli\tools\local-worker']
+trust_level = "trusted"
+
+[projects.'c:\users\flowup\kicad-agentic-mcp\konnect-agentic']
+trust_level = "trusted"
+
+[projects.'c:\users\flowup\ai-stack']
+trust_level = "trusted"
+
+[projects.'c:\users\flowup\documents\etabli\projets\chaine hifi']
+trust_level = "trusted"
+
+[projects.'c:\users\flowup\documents\etabli\projets\fluentia']
+trust_level = "trusted"
+
+[hooks.state]
+
+[hooks.state.'C:\Users\FlowUP\.codex\config.toml:session_end:0:1']
+trusted_hash = "sha256:732ace240c2201bfe2924ac50f529024ecf9f7327e8f2ca5726d4d30f109b682"
+
 [tui.model_availability_nux]
 gpt-6-astra = 4
+
+
+# Skills système du client, sans usage en coding principal. Ils restent
+# disponibles à la demande : la configuration de base les conserve, donc Codex
+# Desktop et toute session lancée sans profil les voient encore.
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\imagegen\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\openai-docs\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\plugin-creator\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\skill-creator\SKILL.md'
+enabled = false
+
+[[skills.config]]
+path = 'C:\Users\FlowUP\.codex\skills\.system\skill-installer\SKILL.md'
+enabled = false

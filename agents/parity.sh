@@ -27,6 +27,15 @@ CLAUDE_EFFORT="high"
 CODEX_MODEL="gpt-6-astra"
 CODEX_EFFORT="high"
 
+# Miroir Git de la stack. Il n'est pas comparé brut au live : certaines tables
+# (chemins de projets, empreintes machine) y sont volontairement normalisées.
+# Seules les valeurs sémantiques critiques et les fichiers du socle sont vérifiés.
+MIRROR="${PARITY_MIRROR:-$HOME_DIR/ai-stack}"
+
+# États critiques devant être identiques dans la configuration live et dans le
+# miroir. Une divergence dans un sens comme dans l'autre est un défaut.
+CAVEMAN_ENABLED="false"
+
 # Skills partagés : une seule copie physique, sous ~/.agents/skills.
 SHARED_SKILLS="project-continuity local-worker noa-local-agents"
 
@@ -115,6 +124,46 @@ grep -q "^model *= *\"$CODEX_MODEL\"" "$CODEX_CONFIG" \
   && ok "Codex : $CODEX_MODEL" || bad "Codex : $CODEX_MODEL attendu"
 grep -q "^model_reasoning_effort *= *\"$CODEX_EFFORT\"" "$CODEX_CONFIG" \
   && ok "Codex : effort $CODEX_EFFORT" || bad "Codex : effort $CODEX_EFFORT attendu"
+
+grep -qE "\"caveman@caveman\": *$CAVEMAN_ENABLED" "$CLAUDE_SETTINGS" \
+  && ok "Claude : caveman inactif" || bad "Claude : caveman devait être $CAVEMAN_ENABLED"
+grep -qE "^enabled *= *$CAVEMAN_ENABLED" <(awk '/^\[plugins\."caveman@caveman"\]/{f=1;next} /^\[/{f=0} f' "$CODEX_CONFIG") \
+  && ok "Codex : caveman inactif" || bad "Codex : caveman devait être $CAVEMAN_ENABLED"
+
+printf 'Miroir Git\n'
+mirror_file() { # mirror_file <libellé> <chemin relatif> <fichier live>
+  local label="$1" rel="$2" live="$3"
+  if [ ! -f "$MIRROR/$rel" ]; then bad "miroir : $rel absent"
+  elif diff -q "$live" "$MIRROR/$rel" >/dev/null 2>&1; then ok "miroir : $label"
+  else bad "miroir : $label — périmé par rapport au live"; fi
+}
+mirror_value() { # mirror_value <libellé> <chemin relatif> <motif ERE attendu>
+  local label="$1" rel="$2" pat="$3"
+  if [ ! -f "$MIRROR/$rel" ]; then bad "miroir : $rel absent"
+  elif grep -qE -- "$pat" "$MIRROR/$rel"; then ok "miroir : $label"
+  else bad "miroir : $label — le miroir représente autre chose"; fi
+}
+
+if [ ! -d "$MIRROR/.git" ]; then
+  bad "miroir introuvable : $MIRROR (définir PARITY_MIRROR)"
+else
+  # Fichiers du socle : aucune normalisation, l'identité stricte est exigible.
+  mirror_file "CONTRACT.md"         "agents/CONTRACT.md"          "$CONTRACT"
+  mirror_file "parity.sh"           "agents/parity.sh"            "$AGENTS_DIR/parity.sh"
+  mirror_file "continuity-check.sh" "agents/continuity-check.sh"  "$AGENTS_DIR/continuity-check.sh"
+  mirror_file "continuity-fixtures.sh" "agents/continuity-fixtures.sh" "$AGENTS_DIR/continuity-fixtures.sh"
+  mirror_file "effort-bench/PROTOCOL.md" "agents/effort-bench/PROTOCOL.md" "$AGENTS_DIR/effort-bench/PROTOCOL.md"
+  mirror_file "effort-bench/build-fixtures.sh" "agents/effort-bench/build-fixtures.sh" "$AGENTS_DIR/effort-bench/build-fixtures.sh"
+
+  # Valeurs sémantiques critiques. Les constantes ci-dessus sont l'attendu
+  # commun : le live est contrôlé plus haut, le miroir l'est ici, si bien qu'une
+  # dérive de l'un ou de l'autre échoue.
+  mirror_value "Claude : $CLAUDE_MODEL"      "claude/settings.json" "\"model\": *\"$CLAUDE_MODEL\""
+  mirror_value "Claude : effort $CLAUDE_EFFORT" "claude/settings.json" "\"effortLevel\": *\"$CLAUDE_EFFORT\""
+  mirror_value "Codex : $CODEX_MODEL"        "codex/config.toml"    "^model *= *\"$CODEX_MODEL\""
+  mirror_value "Codex : effort $CODEX_EFFORT" "codex/config.toml"   "^model_reasoning_effort *= *\"$CODEX_EFFORT\""
+  mirror_value "caveman inactif"             "claude/settings.json" "\"caveman@caveman\": *$CAVEMAN_ENABLED"
+fi
 
 printf 'Antigravity\n'
 agy="$(grep -ril -e antigravity -e gemini \
