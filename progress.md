@@ -2,9 +2,9 @@
 
 ## Phase actuelle
 
-Phase I — optimisation Pareto de la stack. Branche `ai/pareto-optimisation`,
-partie de `main` (`46d2737`). Phase H reste ouverte sur H3 seul, bloqué par le
-quota Codex.
+Phase I fusionnée dans `main` par la PR `nevenfo/ai-stack#2` ; branche de travail
+supprimée, arbre propre. Ne restent ouvertes que les unités suspendues au quota
+Codex : H3, I6.3, I7.3 et I10.2 à I10.4.
 
 ## Tâche actuelle
 
