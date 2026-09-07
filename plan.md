@@ -569,9 +569,9 @@ I7.
 
 ### Tâches
 
-- [ ] I8.1 Comparer sa fonction au contrat canonique et mesurer son coût de
+- [x] I8.1 Comparer sa fonction au contrat canonique et mesurer son coût de
       découverte.
-- [ ] I8.2 Retirer sa découverte active si la valeur nette est nulle, sans laisser
+- [x] I8.2 Retirer sa découverte active si la valeur nette est nulle, sans laisser
       de plugin actif.
 
 ### Validation
@@ -592,11 +592,11 @@ I7.
 
 ### Tâches
 
-- [ ] I9.1 Mesurer le contexte initial de `code-worker`, `second-brain` et
+- [x] I9.1 Mesurer le contexte initial de `code-worker`, `second-brain` et
       `web-research`.
-- [ ] I9.2 Vérifier si le harness injecte ces descriptions de façon nécessaire au
+- [x] I9.2 Vérifier si le harness injecte ces descriptions de façon nécessaire au
       respect du contrat.
-- [ ] I9.3 Adopter la réduction seulement si le gain est net et le comportement
+- [x] I9.3 Adopter la réduction seulement si le gain est net et le comportement
       identique.
 
 ### Validation

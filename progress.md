@@ -8,26 +8,27 @@ quota Codex.
 
 ## Tâche actuelle
 
-I8 — arbitrage `caveman` : mesurer son coût de découverte réel des deux côtés
-avant toute décision.
+I10.1 — construire le corpus reproductible du benchmark High contre Medium.
 
 ## Dernière tâche validée
 
-I7 — mesure intermédiaire, baseline I4 rejouée à l'identique.
+I8 et I9 — deux hypothèses d'optimisation mesurées, aucune n'ouvre de gain.
 
 Validation :
 
-- Session de coding, `cli-lean` : 24 748 → 22 613 caractères, 8 → 3 skills,
-  2 → 0 MCP actifs, plus les 21 outils et 13 256 caractères de schémas du MCP
-  KiCad qui ne sont plus découverts.
-- Base inchangée à 31 943 caractères, 18 skills, 2 MCP : Codex Desktop intact.
-  `cli-kicad` inchangé à 24 745 caractères, `kicad-agentic-mcp` et `konnect`
-  toujours actifs.
-- Aucun avertissement de budget de skills dans aucune des trois configurations.
-- `project-continuity` reste visible sous `cli-lean` avec sa description
-  entière, non tronquée, et `[agents] enabled = true`.
-- Reste non mesuré faute de quota : le comportement réel d'une session de
-  coding, d'une délégation et d'une tâche KiCad. C'est I7.3, à rejouer avec H3.
+- `caveman` : coût de découverte nul, mesuré. Côté Claude, aucune entrée dans
+  `~/.claude/skills/` et `caveman@caveman: false` ; côté Codex, plugin
+  `enabled = false` et `[[skills.config]]` désactivé. Réactivé pour la mesure, il
+  coûterait 20 skills et 4 840 caractères. Sa fonction — dégrader la syntaxe pour
+  compresser la sortie — entre de surcroît en conflit avec le contrat, qui exige
+  une réponse française correcte et la préservation exacte des identifiants.
+  Aucune découverte active ne subsiste à retirer ; `parity.sh` interdit désormais
+  toute réactivation silencieuse des deux côtés.
+- Sous-agents fermés : `code-worker` lancé pour observation rapporte n'avoir ni
+  catalogue de skills, ni instruction de délégation, ni outil Web — seulement
+  `Read, Edit, Write, Bash, Grep, Glob`. Le harness n'injecte donc rien à
+  retirer ; l'hypothèse est infirmée côté Claude. Coût relevé par le harness :
+  13 871 tokens pour ce lancement, sans appel d'outil.
 
 ## Décisions actives
 
@@ -90,7 +91,8 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I8.1 — mesurer le coût de découverte actuel de `caveman` des deux côtés :
-vérifier qu'aucun plugin n'est actif et qu'aucun skill n'est découvert, puis
-comparer au coût mesuré lorsqu'il est réactivé — +20 skills et 4 840 caractères
-côté Codex — pour décider s'il reste quelque chose à retirer.
+I10.1 — écrire dans le dépôt le corpus reproductible du benchmark High contre
+Medium : six tâches — modification ciblée, bug multi-fichiers, feature moyenne,
+exploration, review, reprise de continuité — avec pour chacune un dépôt de
+départ figé, un prompt littéral et une validation exécutable. Ne rien exécuter
+côté Codex avant le retour du quota.
