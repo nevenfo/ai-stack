@@ -1,0 +1,21 @@
+{
+  "on_session_end": {
+    "command": "python C:/Users/FlowUP/Documents/Etabli/Tools/conv-exporter/hooks/antigravity_hook.py",
+    "description": "Export Antigravity conversation to Second Brain inbox after session ends.",
+    "env": {}
+  },
+  "rtk-antigravity": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/PROGRA~1/Git/bin/bash.exe C:/Users/FlowUP/.gemini/hooks/rtk-hook-gemini.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

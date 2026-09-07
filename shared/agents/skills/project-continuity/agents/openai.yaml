@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Continuity"
+  short_description: "Continuité fiable des projets multi-session"
+  default_prompt: "Utilise $project-continuity pour reprendre ce projet depuis plan.md et progress.md."

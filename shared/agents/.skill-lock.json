@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "skills": {
+    "caveman": {
+      "source": "JuliusBrussee/caveman",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/JuliusBrussee/caveman.git",
+      "skillPath": "skills/caveman/SKILL.md",
+      "skillFolderHash": "166040c027f7764d43df36abc5df0079bfc6394b",
+      "installedAt": "2026-07-30T21:14:03.723Z",
+      "updatedAt": "2026-07-30T21:14:03.723Z"
+    }
+  },
+  "dismissed": {}
+}

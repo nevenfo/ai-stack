@@ -1,0 +1,61 @@
+# Minimal Codex CLI coding profile. The base configuration remains unchanged
+# for Codex Desktop and specialized sessions.
+
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 2
+default_subagent_model = "gpt-5.6-terra"
+default_subagent_reasoning_effort = "medium"
+
+[plugins."browser@openai-bundled"]
+enabled = false
+
+[plugins."visualize@openai-bundled"]
+enabled = false
+
+[plugins."sites@openai-bundled"]
+enabled = false
+
+[plugins."documents@openai-primary-runtime"]
+enabled = false
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = false
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = false
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = false
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = false
+
+# Caveman lite remains enforced by AGENTS.md; its 22 optional skills stay in full mode.
+[plugins."caveman@caveman"]
+enabled = false
+
+[mcp_servers.node_repl]
+command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
+enabled = false
+
+# Temporary workaround for Codex subagent-private MCP inheritance bug.
+# Remove parent Konnect exposure when upstream behavior is fixed and validated.
+[mcp_servers.konnect]
+command = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+args = [
+  "-NoProfile",
+  "-NonInteractive",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  "C:\\Users\\FlowUP\\.agents\\konnect\\konnect-bootstrap.ps1"
+]
+
+[shell_environment_policy.set]
+CLAUDE_CONFIG_DIR = 'C:\Users\FlowUP\.codex\rtk-cli'
+

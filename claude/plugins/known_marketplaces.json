@@ -1,0 +1,16 @@
+{
+  "caveman": {
+    "installLocation": "C:\\Users\\FlowUP\\.claude\\plugins\\marketplaces\\caveman",
+    "source": {
+      "repo": "JuliusBrussee/caveman",
+      "source": "github"
+    }
+  },
+  "claude-plugins-official": {
+    "installLocation": "C:\\Users\\FlowUP\\.claude\\plugins\\marketplaces\\claude-plugins-official",
+    "source": {
+      "repo": "anthropics/claude-plugins-official",
+      "source": "github"
+    }
+  }
+}

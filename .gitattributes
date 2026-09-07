@@ -1,0 +1,5 @@
+# Fidelite octet pour octet : ce depot est un miroir de configuration et chaque
+# fichier doit se restaurer tel qu'il a ete lu sur la machine. Sans cette regle,
+# `core.autocrlf` reecrit les fins de ligne et un fichier restaure differe de la
+# configuration reelle qu'il represente.
+* -text

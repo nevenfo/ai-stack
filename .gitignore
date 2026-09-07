@@ -1,0 +1,20 @@
+# ai-stack ne contient que de la configuration texte. Rien de généré, rien de
+# personnel, rien de volumineux — donc presque rien à ignorer.
+
+# Caches et environnements locaux
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+
+# Journaux et sauvegardes
+*.log
+*.bak
+*.bak.*
+
+# Poids et runtimes de modèles (jamais versionnés)
+*.gguf
+*.safetensors
+*.onnx
+*.ckpt

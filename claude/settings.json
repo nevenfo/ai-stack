@@ -1,0 +1,81 @@
+{
+  "env": {
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(C:/Users/FlowUP/noa/bin/noa-agent.cmd:*)",
+      "Bash(C:\\Users\\FlowUP\\noa\\bin\\noa-agent.cmd:*)"
+    ]
+  },
+  "model": "sonnet",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "WebSearch|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/PROGRA~1/Git/bin/bash.exe C:/Users/FlowUP/.claude/hooks/web-research-gate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__konnect__(place_component|move_component|rotate_component|route_trace|add_via|route_differential_pair|route_pad_to_pad|refill_zones)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\FlowUP\\\\Documents\\\\KiCad\\\\10.0\\\\3rdparty\\\\plugins\\\\com_github_mixelpixx_konnect\\\\bin\\\\konnect.exe skill pre-pcb-ipc"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:/Users/FlowUP/Documents/Etabli/Tools/conv-exporter/hooks/claude_stop_hook.py"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:/Users/FlowUP/noa/hooks/claude_session_end.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "caveman@caveman": false
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
+  },
+  "language": "french",
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": true
+}

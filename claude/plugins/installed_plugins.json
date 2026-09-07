@@ -1,0 +1,13 @@
+{
+  "plugins": {
+    "caveman@caveman": [
+      {
+        "gitCommitSha": "11ddc0c9813c8f75365cd5be2f753df08712f154",
+        "installPath": "C:\\Users\\FlowUP\\.claude\\plugins\\cache\\caveman\\caveman\\11ddc0c9813c",
+        "scope": "user",
+        "version": "11ddc0c9813c"
+      }
+    ]
+  },
+  "version": 2
+}
