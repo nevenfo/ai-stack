@@ -2,37 +2,65 @@
 
 ## Phase actuelle
 
-Refonte « miroir de configuration » — 2026-09-07.
+Phase E — suppression d'Antigravity.
+Branche `ai/claude-codex-parity`, partie de `main` (`cc6e9d2`).
+
+## Tâche actuelle
+
+E1 — décâbler Antigravity du dépôt, des contrats et de la configuration active.
 
 ## Dernière tâche validée
 
-Refonte structurelle complète (voir `plan.md` § Refonte). Racine Git neuve,
-dépôt `nevenfo/ai-stack` recréé vierge, `main` poussé. Trois composants essaimés
-dans leurs propres dépôts privés. Ancien historique archivé dans
-`nevenfo/ai-stack-legacy` + `C:\Users\FlowUP\archives\ai-stack-legacy-2026-09-07.bundle`.
+F1 — contrôle de parité déterministe, avec son test négatif. Les phases B, C, D et
+F sont closes : le contrat canonique est unique et injecté des deux côtés, le skill
+`project-continuity` est partagé physiquement et complet, modèle et effort sont
+alignés.
+
+Validation :
+
+- `bash ~/.agents/parity.sh` : `PARITÉ OK`, code de retour 0. Bloc canonique
+  identique des deux côtés, 14 invariants présents, 3 skills partagés, modèle et
+  effort conformes.
+- Test négatif : un accent retiré dans le bloc côté Claude donne `PARITÉ ROMPUE`
+  et un code de retour 1 ; `parity.sh --fix` restaure et repasse à 0.
+- Jonctions : `sha256sum` identique via `~/.agents/skills/<s>` et
+  `~/.claude/skills/<s>` pour les trois skills ; une écriture dans la source est
+  vue immédiatement depuis `~/.claude`. Claude Code a rechargé les skills à
+  travers les jonctions.
+- `project-continuity` : les quatorze points du protocole sont couverts, vérifiés
+  motif par motif ; `SKILL.md` fait 9 805 octets, `git-delivery.md` 5 414.
+- Codex : `model = "gpt-6-astra"`, `model_reasoning_effort = "high"`, présents dans
+  `~/.codex/models_cache.json` du client `0.153.4`.
 
 ## Décisions actives
 
-- `export` ≠ `noa-export`. Aucune donnée KPI dans ce dépôt.
-- Chemins gérés : `claude/`, `codex/`, `antigravity/`, `shared/`, plus les fichiers
-  de contrat racine.
-- `shared/noa/`, `shared/conv-exporter/`, `shared/local-worker/` = surface
-  d'intégration + `REFERENCE.md` uniquement.
-- `.gitattributes` `* -text` conservé pour la fidélité d'octets des configs miroir.
+- Deux harnesses pairs. Aucun fallback, aucun propriétaire de projet.
+- `~/.agents/` est le socle canonique commun : `CONTRACT.md`, `parity.sh`,
+  `skills/`. Le miroir le représente dans `agents/`, seul propriétaire des skills
+  partagés — `claude/skills/` ne les duplique plus.
+- Le bloc canonique ne s'édite que dans `CONTRACT.md`, jamais dans un harness.
+- `agents/skills/project-continuity/agents/openai.yaml` est le packaging Codex du
+  skill ; encodage latin-1 hérité, laissé tel quel, hors périmètre.
+- Aucune métrique de contexte ou de quota inventée : la frontière de session
+  s'appuie sur un signal réellement exposé par le harness.
+- Point de retour : tag `pre-parity-refactor-20260907` ; sauvegarde des configs
+  live dans `C:\Users\FlowUP\.stack-backups\20260907-parity`.
 
-## Points d'attention (dette connue)
+## Blocage actif
 
-- Dépôt `nevenfo/noa` : `parents[2]` corrigé dans `noa_kpi/events.py`, mais la
-  suite de tests NOA (~237) et les modules `aiv2/*` hérités n'ont pas été
-  re-validés sous la nouvelle racine. À faire dans une session NOA.
-- Les résultats de benchmark non suivis de l'ancien `noa/corpus/**` et
-  `noa/research/*.json` (déjà gitignorés) n'ont pas été transférés ; ils sont
-  régénérables via les scripts `corpus/*.py` présents dans `nevenfo/noa`.
-- `codex/config.toml` du miroir : bloc `[mcp_servers.node_repl]` (plomberie
-  computer-use) conservé avec empreintes templatisées ; à réévaluer au prochain
-  `export` (est-ce de la config intentionnelle ?).
+Aucun.
+
+## Fichiers / zones utiles
+
+- Socle : `~/.agents/{CONTRACT.md,parity.sh,skills/}`.
+- Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`.
+- À décâbler : `antigravity/`, `shared/conv-exporter/hooks/antigravity_hook.py`,
+  `~/.gemini/`, `~/.agents/rules/`, mentions dans `AGENTS.md` et `README.md`.
 
 ## NEXT ACTION
 
-Lancer un `export` complet pour réconcilier le miroir avec l'état live des trois
-harnesses et confirmer que le contrat `AGENTS.md` est autosuffisant.
+E1 — supprimer `antigravity/` du dépôt, retirer Antigravity des contrats
+`AGENTS.md`, `README.md` et de `shared/`, archiver `~/.gemini/` et
+`~/.agents/rules/` dans `.stack-backups` sans désinstaller le logiciel, puis
+vérifier par recherche insensible à la casse qu'aucun câblage fonctionnel ne
+subsiste.

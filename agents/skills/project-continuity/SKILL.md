@@ -11,12 +11,24 @@ Le principal possède stratégie, état global, décisions, validations et Git. 
 
 - `plan.md` : objectif, invariants, roadmap durable, IDs stables, dépendances et validations.
 - `progress.md` : état courant compact et une seule `NEXT ACTION`.
-- Git : historique et preuve secondaire.
+- Git local : transaction, diff et rollback.
+- GitHub : historique durable partagé, seul checkpoint qui survit à la machine.
 - Tests/contrôles : preuves techniques.
 - Conversation et contexte worker : temporaires.
 - Second Brain : seulement si une mémoire personnelle, historique ou inter-projet indispensable manque au dépôt.
 
-Ne pas dupliquer une information. Le handoff Claude ↔ Codex doit être reconstructible depuis ces fichiers, Git et les tests, sans transcript.
+Ne pas dupliquer une information. Claude Code et Codex sont pairs : aucun ne possède le projet, et rien d'indispensable ne reste enfermé dans le contexte conversationnel de l'un d'eux. Le handoff doit être reconstructible depuis ces fichiers, Git et les tests, sans transcript et sans adaptation au harness qui reprend.
+
+## Preflight
+
+Avant le premier travail substantiel d'une session, quel que soit le harness. Existence n'est pas conformité, et conformité n'est pas exactitude.
+
+1. **Structure.** `plan.md` et `progress.md` existent ; `progress.md` porte les sections du contrat et exactement une `NEXT ACTION` ; chaque unité de `plan.md` porte `Objectif`, `Dépendances`, `Tâches` et `Validation`.
+2. **Sémantique.** La `NEXT ACTION` est unique, concrète et rattachée à un ID du plan ; `progress.md` décrit un état, pas un journal ; aucune trace obsolète ne subsiste.
+3. **Corroboration.** Confronter l'état déclaré au réel : `git status`, branche, HEAD, derniers commits, remote, et la validation que le plan associe à la dernière tâche cochée. Une tâche déclarée terminée dont la validation échoue, ou dont le travail n'est ni commité ni poussé, n'est pas terminée.
+4. **Réparation.** Toute non-conformité ou contradiction se répare avant de poursuivre : décocher ce qui n'est pas prouvé, réécrire le snapshot, redéfinir la `NEXT ACTION`. En cas de conflit, l'ordre de confiance est tests, puis Git/GitHub, puis fichiers réels, puis `progress.md` en dernier.
+
+Absence totale de continuité dans un vrai projet : initialiser. État partiel ou dérivé : réparer, jamais repartir de zéro sur ce qui est réellement prouvé.
 
 ## Initialiser
 
@@ -83,17 +95,21 @@ Ne lire tout le plan que si l’extraction ciblée ne suffit réellement pas. Ut
 
 Maintenir une seule tâche active, sans limiter le nombre de tâches par tour. Rester dans le principal si le contexte est localisé ; déléguer seulement une unité autonome rentable avec ID, objectif, contraintes, ancres, dépendances et validation.
 
-Cycle : `NEXT ACTION` → travail → test proportionné → preuve → checkbox ciblée → remplacement de `progress.md` → checkpoint Git sûr → prochaine action.
+Cycle : `NEXT ACTION` → travail → test proportionné → preuve → checkbox ciblée → contrôle de continuité → remplacement de `progress.md` → checkpoint Git sûr → push → prochaine action.
+
+Le contrôle de continuité est le preflight en miniature, rejoué après chaque PASS : le snapshot décrit-il encore l'état réel, la `NEXT ACTION` est-elle toujours unique et juste, une checkbox cochée est-elle encore prouvée ? Sinon, réparer immédiatement. C'est ce qui empêche une session de plusieurs heures de dériver sans que rien ne le signale.
 
 Le principal vérifie le résultat du worker. En PASS, cocher exactement la tâche prouvée et poursuivre. En échec, garder la tâche ouverte, corriger la régression et obtenir PASS avant d’avancer. Après l’initialisation, modifier la roadmap future seulement lorsqu’une preuve invalide, précise ou complète les dépendances, tâches ou validations déjà définies. Ne pas utiliser cette règle pour différer la définition initiale des phases futures.
 
-## Git minimal
+## Git et GitHub
 
 À l’ouverture, relever seulement si utile : HEAD, branche, remote, `git status --short`, diff ciblé et index. Tout changement initial appartient à l’utilisateur ; ne jamais l’écraser, le restaurer, le désindexer ni l’inclure implicitement. Indexer uniquement chemins/hunks dont l’ownership est certain ; jamais `git add .`, `git add -A` ou `git commit -a`.
 
 Le principal seul possède branche, staging, commit et push. Un checkpoint Git ambigu peut rester PARTIAL/BLOCKED sans arrêter les travaux indépendants. Git reste la source de vérité ; `progress.md` ne conserve qu’un statut nécessaire à la reprise.
 
-Charger [references/git-delivery.md](references/git-delivery.md) seulement si la tâche implique réellement branche de livraison, push, PR, merge, branche protégée, conflit, publication complexe, nettoyage de branche ou `--force-with-lease`.
+Tout vrai projet persistant a un remote GitHub, privé par défaut. Un commit local non poussé n'est pas un checkpoint durable : il ne survit ni à la machine ni au passage à l'autre harness. Granularité : commit par unité validée, push par checkpoint, PR par phase ou fonctionnalité cohérente — jamais par micro-tâche. Un remote existant n'est jamais remplacé, un dépôt n'est jamais rendu public, aucun secret n'est poussé.
+
+Charger [references/git-delivery.md](references/git-delivery.md) si la tâche implique réellement branche de livraison, push, PR, merge, branche protégée, conflit, publication complexe, nettoyage de branche, `--force-with-lease`, ou l'initialisation GitHub d'un projet qui n'a pas encore de remote.
 
 ## Checkpoint, reprise et arrêt
 
@@ -107,4 +123,10 @@ Rendre la main seulement si :
 - un blocage technique réel persiste après diagnostic raisonnable ;
 - le contexte est devenu assez bruité pour menacer la fiabilité et l’état persistant permet une reprise non ambiguë.
 
-Avant une frontière de contexte, `progress.md` contient état validé, décisions, fichiers utiles, tests, blocage ou `Aucun.`, puis une seule `NEXT ACTION`. Ne jamais automatiser `/clear`, `/compact` ou `/rewind`.
+## Handoff et frontière de session
+
+Avant une frontière de contexte — changement de conversation, de session ou de harness — `progress.md` contient état validé, décisions actives, fichiers utiles, dernière preuve, blocage ou `Aucun.`, puis une seule `NEXT ACTION`, et le travail est commité puis poussé. Il n'y a pas d'autre artefact de handoff : ni `handoff.md`, ni résumé de conversation, ni note hors dépôt.
+
+Le test du handoff est simple : l'autre harness, ouvert sur le seul dépôt, doit pouvoir reprendre sans poser de question. Si quelque chose d'indispensable n'existe que dans la conversation en cours, il manque à `plan.md` ou à `progress.md`.
+
+N'utiliser qu'un signal de contexte ou de quota réellement exposé par le harness ; ne jamais en estimer un. Quand le budget se resserre : finir l'unité atomique en cours, valider, persister, pousser, puis repartir sur un contexte neuf plutôt qu'ouvrir une grande unité. Ne jamais automatiser `/clear`, `/compact` ou `/rewind`.

@@ -1,3 +1,13 @@
+# CONTRACT — source canonique commune Claude Code / Codex
+
+Ce fichier est la source unique du contrat partagé. Le bloc délimité ci-dessous est
+recopié **octet pour octet** dans `~/.claude/CLAUDE.md` et `~/.codex/AGENTS.md`, qui
+n'y ajoutent que leur section de routage native. Les deux harnesses sont pairs :
+aucun n'est le principal, aucun n'est le secours.
+
+Modifier le contrat commun : éditer ce fichier, puis `agents-sync --fix`, puis
+`parity-check`. Ne jamais éditer le bloc directement dans un des deux harnesses.
+
 <!-- BEGIN CANON -->
 # Contrat
 
@@ -105,35 +115,3 @@ section utile de `plan.md`, puis Git/GitHub, puis les fichiers et tests nécessa
 Jamais un rechargement d'historique. Ne jamais automatiser `/clear`, `/compact` ou
 `/rewind`.
 <!-- END CANON -->
-
-# Mécanismes natifs
-
-Ces noms sont la forme Codex des capacités décrites plus haut. Claude Code expose
-les mêmes capacités sous ses propres noms ; le contrat, lui, est identique.
-
-- `project-continuity` (skill) : protocole de continuité détaillé — initialisation,
-  preflight, reprise, audit et réparation de `plan.md`/`progress.md`, checkpoint,
-  GitHub, handoff. À charger dès qu'un projet persistant est en jeu, y compris pour
-  l'initialiser.
-- `second-brain` (sous-agent) : lecture du Second Brain.
-- `web-research` (sous-agent) : recherche Web, externe ou récente. Le Web est
-  désactivé dans le principal (`web_search = "disabled"`).
-- `explorer` (sous-agent) : exploration read-only substantielle d'une zone inconnue ;
-  ni pour quelques recherches, ni en préalable systématique à `code-worker`.
-- `code-worker` (sous-agent) : unité autonome avec boucle code-tests-correction
-  substantielle.
-- `noa-local-agents` (skill, commande locale, pas un sous-agent) : sous-tâche
-  read-only significative déléguée au LLM local hors quota — exploration,
-  cross-reference, inventaire, analyse de logs, synthèse, préparation de contexte.
-  Jamais mutation, exécution, décision produit ou action externe ; sur
-  `UNCERTAIN`/`FAIL`, poursuis toi-même.
-- `network-owner` (sous-agent) : `pi-nas`, Tailscale, réseau et services associés.
-- `desktop-control` (sous-agent) : GUI Windows nécessaire sans meilleure
-  CLI/API/fichier.
-- `kicad-control` (sous-agent) : opération, inspection ou diagnostic direct d'un
-  projet KiCad ; le MCP KiCad n'entre jamais dans le principal.
-
-Sous-agent spécialisé : `fork_turns = "none"`.
-
-Filtrer les sorties de commande avec RTK : `rtk read <file>`, cmdlets via
-`rtk proxy pwsh -NoProfile -Command "..."`.

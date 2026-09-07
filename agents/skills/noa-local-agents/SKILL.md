@@ -26,9 +26,11 @@ accentuée passée en argument de ligne de commande s'abîme sous Windows :
 `--project` est **obligatoire en pratique** : sans lui, l'agent explore le
 dossier courant du shell, qui n'est pas toujours celui de ta tâche.
 
-Ajoute `--backend claude --session-id <ta session>` : c'est ce qui rattache la
-délégation à ta session dans les KPI. Sans cela, l'appel est compté comme
-« non attribué » et n'entre pas dans le taux d'adoption.
+Rattachement KPI, seul point qui dépend du harness. Sous Codex, l'agent lit
+`CODEX_SESSION_ID` dans son environnement et rattache l'appel tout seul. Sous
+Claude Code, ajoute `--backend claude --session-id <ta session>` : sans cela
+l'appel est compté « non attribué » et n'entre pas dans le taux d'adoption. Les
+passer explicitement reste toujours possible et prioritaire.
 
 ## Rôles
 
@@ -128,3 +130,6 @@ t'économisait.
   utile qu'une liste incomplète présentée comme complète.
 - Strictement confiné à `--project` : il ne peut pas lire ailleurs.
 - Aucun accès réseau, aucune exécution de commande.
+- Il joint LM Studio en loopback. Sous Codex, dans un projet non approuvé, le
+  sandbox coupe le réseau et l'appel rend un `FAIL` immédiat : c'est un `FAIL`
+  comme un autre, tu poursuis toi-même.

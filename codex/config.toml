@@ -1,5 +1,8 @@
-model = "gpt-5.6-sol"
-model_reasoning_effort = "medium"
+# Pendant Codex de « Claude Opus 5 + effort high » : le modèle le plus capable du
+# catalogue live du client (models_cache.json, priority 1), à un niveau de
+# raisonnement élevé. Même intention opérationnelle, identifiants différents.
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
 model_verbosity = "low"
 web_search = "disabled"
 tool_output_token_limit = 4000
