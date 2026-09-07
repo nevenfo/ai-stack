@@ -2,9 +2,9 @@
 
 ## Phase actuelle
 
-Phase I. Le gros a été fusionné dans `main` par la PR `nevenfo/ai-stack#2` ;
-I12 suit sur la branche `ai/retrait-caveman`. Ne restent ensuite ouvertes que
-les unités suspendues au quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4.
+Phase I fusionnée dans `main` par les PR `nevenfo/ai-stack#2` et `#3` ;
+branches de travail supprimées, arbre propre. Ne restent ouvertes que les unités
+suspendues au quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4.
 
 ## Tâche actuelle
 
