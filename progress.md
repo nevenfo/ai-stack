@@ -8,25 +8,26 @@ quota Codex.
 
 ## Tâche actuelle
 
-I6 — retirer `kicad-agentic-mcp` du principal Codex, puis I5 pour les surfaces
-restantes.
+I5 — vérifier ce qui reste réellement chargé en session de coding, et si les
+surfaces restantes valent une coupe.
 
 ## Dernière tâche validée
 
-I4 — baseline de la configuration Codex effective, mesurée sur le client
-`codex-cli 0.153.4`.
+I6 — le MCP KiCad ne fuit plus dans une session de coding Codex.
 
 Validation :
 
-- Instrument : `codex [-p <profil>] debug prompt-input "t"`, qui rend le contexte
-  réellement visible par le modèle sans consommer de quota. Mesure rejouée après
-  chargement du catalogue distant : contexte identique, donc stable.
-- Contexte de démarrage dans `~/ai-stack` : base 31 943 caractères et 18 skills ;
-  `cli-lean` 24 745 et 8 skills ; `cli-kicad` 24 745 et 8 skills.
-- Sous `cli-lean`, `node_repl` est bien désactivé mais `kicad-agentic-mcp` reste
-  `enabled=true` : la base le déclare et aucun profil ne le désactive.
-- Aucune configuration actuelle ne reproduit l'avertissement de budget de skills,
-  y compris `caveman` réactivé (38 skills, 36 786 caractères).
+- `codex -p cli-lean mcp list --json` : `kicad-agentic-mcp enabled=false`,
+  `node_repl enabled=false` — plus aucun MCP actif en session de coding.
+- `codex -p cli-kicad mcp list --json` : `kicad-agentic-mcp` et `konnect`
+  restent `enabled=true`. Configuration de base inchangée, donc Codex Desktop
+  intact.
+- Coût de découverte évité, mesuré en interrogeant le serveur en JSON-RPC
+  (`tools/list`) : 21 outils, 13 256 caractères de schémas. Le contexte de
+  démarrage mesuré par `prompt-input` est inchangé à 24 748 caractères — les
+  schémas d'outils n'y transitent pas.
+- Symétrie confirmée : côté Claude, aucun `mcpServers` global ; l'agent
+  `kicad-control` porte `konnect` dans son propre en-tête.
 
 ## Décisions actives
 
@@ -55,6 +56,10 @@ Validation :
 - `codex debug prompt-input` est l'instrument de mesure de la phase I. Les
   options globales, `-p` compris, doivent précéder `debug` ; `-c` ne surcharge
   pas une clé de plugin comportant un `@`.
+- Le workaround d'héritage MCP des sous-agents reste borné au profil
+  `cli-kicad`, qui seul expose `konnect` au parent. Il pourra être retiré quand
+  un sous-agent Codex accédera à son MCP privé sans exposition parente ; le
+  signal de levée est le test I6.3, à rejouer dès que le quota le permet.
 - Le wrapper `codex` est une fonction du profil PowerShell : hors d'un shell
   PowerShell l'ayant chargé — depuis Git Bash ou un autre agent — `codex` et
   `codex exec` retombent sur la configuration de base, sans profil lean.
@@ -80,7 +85,8 @@ scratchpad de session. La phase I n'en dépend pas et se poursuit.
 
 ## NEXT ACTION
 
-I6.1 — désactiver `kicad-agentic-mcp` dans `cli-lean.config.toml`, vérifier par
-`codex -p cli-lean mcp list --json` qu'il passe à `enabled=false` alors qu'il
-reste actif sous `cli-kicad`, puis mesurer le contexte avant/après par
-`codex -p cli-lean debug prompt-input`.
+I5.1 — établir ce qui reste réellement chargé sous `cli-lean` : les huit skills
+visibles, le bloc `<recommended_plugins>` de 3 336 caractères et les treize
+plugins du catalogue distant marqués « installed, enabled ». Déterminer par
+mesure lesquels sont réductibles sans casser Codex Desktop, puis ne couper que
+ceux dont le gain est mesuré.

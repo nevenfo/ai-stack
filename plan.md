@@ -521,10 +521,12 @@ I4.
 
 ### Tâches
 
-- [ ] I6.1 Établir si l'exposition globale du MCP KiCad est encore imposée par la
+- [x] I6.1 Établir si l'exposition globale du MCP KiCad est encore imposée par la
       limitation d'héritage MCP des sous-agents.
-- [ ] I6.2 Retirer l'exposition globale, ou la restreindre strictement aux
+- [x] I6.2 Retirer l'exposition globale, ou la restreindre strictement aux
       profils KiCad avec la raison exacte et le signal de levée du contournement.
+- [ ] I6.3 Sous quota Codex, prouver fonctionnellement qu'une tâche KiCad
+      aboutit encore via l'agent `kicad-control`, profil `cli-kicad`.
 
 ### Validation
 
