@@ -53,8 +53,11 @@ premier, sans reconstruire son état à la main.
 | Web hors du principal | hook de refus | `web_search = "disabled"` | divergence légitime : deux mécanismes natifs |
 
 ```bash
-bash agents/parity.sh          # vérifie ; sort en erreur si un côté a divergé
-bash agents/parity.sh --fix    # réinjecte le bloc canonique dans les deux
+bash agents/parity.sh                   # vérifie ; sort en erreur si un côté a divergé
+bash agents/parity.sh --fix             # réinjecte le bloc canonique dans les deux
+bash agents/continuity-check.sh <dir>   # forme de plan.md / progress.md
+bash agents/continuity-fixtures.sh      # prouve que le contrôle ci-dessus sait échouer
+bash agents/effort-bench/build-fixtures.sh <dir>   # corpus du benchmark d'effort
 ```
 
 Le contrôle porte sur les deux configurations live **et** sur ce dépôt. Il ne
