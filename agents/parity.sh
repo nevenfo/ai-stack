@@ -32,10 +32,6 @@ CODEX_EFFORT="high"
 # Seules les valeurs sémantiques critiques et les fichiers du socle sont vérifiés.
 MIRROR="${PARITY_MIRROR:-$HOME_DIR/ai-stack}"
 
-# États critiques devant être identiques dans la configuration live et dans le
-# miroir. Une divergence dans un sens comme dans l'autre est un défaut.
-CAVEMAN_ENABLED="false"
-
 # Skills partagés : une seule copie physique, sous ~/.agents/skills.
 SHARED_SKILLS="project-continuity local-worker noa-local-agents"
 
@@ -125,10 +121,6 @@ grep -q "^model *= *\"$CODEX_MODEL\"" "$CODEX_CONFIG" \
 grep -q "^model_reasoning_effort *= *\"$CODEX_EFFORT\"" "$CODEX_CONFIG" \
   && ok "Codex : effort $CODEX_EFFORT" || bad "Codex : effort $CODEX_EFFORT attendu"
 
-grep -qE "\"caveman@caveman\": *$CAVEMAN_ENABLED" "$CLAUDE_SETTINGS" \
-  && ok "Claude : caveman inactif" || bad "Claude : caveman devait être $CAVEMAN_ENABLED"
-grep -qE "^enabled *= *$CAVEMAN_ENABLED" <(awk '/^\[plugins\."caveman@caveman"\]/{f=1;next} /^\[/{f=0} f' "$CODEX_CONFIG") \
-  && ok "Codex : caveman inactif" || bad "Codex : caveman devait être $CAVEMAN_ENABLED"
 
 printf 'Miroir Git\n'
 mirror_file() { # mirror_file <libellé> <chemin relatif> <fichier live>
@@ -162,15 +154,33 @@ else
   mirror_value "Claude : effort $CLAUDE_EFFORT" "claude/settings.json" "\"effortLevel\": *\"$CLAUDE_EFFORT\""
   mirror_value "Codex : $CODEX_MODEL"        "codex/config.toml"    "^model *= *\"$CODEX_MODEL\""
   mirror_value "Codex : effort $CODEX_EFFORT" "codex/config.toml"   "^model_reasoning_effort *= *\"$CODEX_EFFORT\""
-  mirror_value "caveman inactif"             "claude/settings.json" "\"caveman@caveman\": *$CAVEMAN_ENABLED"
 fi
 
-printf 'Antigravity\n'
+printf 'Composants retirés\n'
 agy="$(grep -ril -e antigravity -e gemini \
         "$CLAUDE_MD" "$CODEX_MD" "$CONTRACT" "$CLAUDE_SETTINGS" "$CODEX_CONFIG" \
         "$AGENTS_DIR/skills" "$HOME_DIR/.claude/agents" "$HOME_DIR/.codex/agents" \
         2>/dev/null | grep -v -e '\.bak' -e '\.disabled' || true)"
-[ -z "$agy" ] && ok "aucun câblage actif" || bad "encore câblé : $(echo "$agy" | tr '\n' ' ')"
+[ -z "$agy" ] && ok "Antigravity — aucun câblage actif" \
+  || bad "Antigravity encore câblé : $(echo "$agy" | tr '\n' ' ')"
+
+# Caveman a été retiré de la stack le 2026-09-07 : ni configuration, ni skill
+# découvrable, ni marketplace déclaré. Le contrôle porte donc sur son absence,
+# et non sur un état inactif — un plugin désactivé redevient actif d'un mot.
+cav="$(grep -ril caveman \
+        "$CLAUDE_MD" "$CODEX_MD" "$CONTRACT" "$CLAUDE_SETTINGS" \
+        "$AGENTS_DIR/skills" "$HOME_DIR/.claude/agents" "$HOME_DIR/.codex/agents" \
+        "$HOME_DIR/.claude/plugins/installed_plugins.json" \
+        "$HOME_DIR/.claude/plugins/known_marketplaces.json" \
+        2>/dev/null | grep -v -e '\.bak' -e '\.disabled' || true)"
+# Dans la configuration Codex, un chemin de projet peut porter ce nom sans que
+# rien ne soit câblé : d'anciens dossiers de mesure s'appellent encore ainsi.
+# Seules les tables comptent.
+grep -i caveman "$CODEX_CONFIG" 2>/dev/null | grep -qv '^\[projects\.' \
+  && cav="$cav $CODEX_CONFIG"
+[ -e "$AGENTS_DIR/skills/caveman" ] && cav="$cav $AGENTS_DIR/skills/caveman"
+[ -z "$(echo "$cav" | tr -d "[:space:]")" ] && ok "Caveman — retiré de la stack" \
+  || bad "Caveman subsiste : $(echo "$cav" | tr '\n' ' ')"
 
 printf '\n'
 if [ "$fail" = 0 ]; then printf 'PARITÉ OK\n'; else printf 'PARITÉ ROMPUE\n'; fi

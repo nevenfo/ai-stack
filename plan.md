@@ -653,3 +653,32 @@ I7, I10.
 
 Toute version candidate réussit exactement les mêmes tests de continuité et de
 handoff que la version actuelle, fixtures H2 et H3 comprises.
+
+## I12 — Retrait complet de Caveman
+
+### Objectif
+
+Supprimer de la stack la surface de configuration active et persistée de
+Caveman, dont I8 a établi que la valeur nette était nulle. Un plugin désactivé
+redevient actif d'un mot : seule l'absence protège durablement.
+
+### Dépendances
+
+I8.
+
+### Tâches
+
+- [x] I12.1 Vérifier qu'aucun composant actif n'en dépend.
+- [x] I12.2 Désinstaller plugin et marketplace par les commandes du client,
+      puis retirer les tables résiduelles des deux côtés.
+- [x] I12.3 Supprimer le skill du socle, purger `.skill-lock.json`, retirer les
+      caches et marketplaces installés.
+- [x] I12.4 Remplacer dans `parity.sh` le contrôle « inactif » par un contrôle
+      d'absence, avec test négatif.
+- [x] I12.5 Resynchroniser le miroir et revalider l'ensemble.
+
+### Validation
+
+Aucun `caveman` actif ni découvrable dans la configuration live comme dans le
+miroir ; `parity.sh` échoue si la moindre surface réapparaît ; `project-continuity`
+et le défaut `high` sont inchangés.

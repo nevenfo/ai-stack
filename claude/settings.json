@@ -61,17 +61,6 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "caveman@caveman": false
-  },
-  "extraKnownMarketplaces": {
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
-    }
-  },
   "language": "french",
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,

@@ -35,10 +35,6 @@ enabled = false
 [plugins."template-creator@openai-primary-runtime"]
 enabled = false
 
-# Caveman lite remains enforced by AGENTS.md; its 22 optional skills stay in full mode.
-[plugins."caveman@caveman"]
-enabled = false
-
 [mcp_servers.node_repl]
 command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
 enabled = false
