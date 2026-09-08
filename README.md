@@ -44,6 +44,7 @@ premier, sans reconstruire son état à la main.
 | création de dépôt privé | ✓ | ✓ | `references/git-delivery.md` |
 | boucle de validation | ✓ | ✓ | bloc canonique |
 | philosophie de sous-agents | ✓ | ✓ | bloc canonique |
+| reroutage après `BLOCKED`, cas `GUI_REQUIRED` | ✓ | ✓ | bloc canonique + `kicad-control` / `desktop-control` |
 | philosophie de skills | ✓ | ✓ | bloc canonique |
 | politique Second Brain | ✓ | ✓ | bloc canonique |
 | handoff de session | ✓ | ✓ | `project-continuity` |
