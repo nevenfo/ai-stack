@@ -2,14 +2,13 @@
 
 ## Phase actuelle
 
-Phase I fusionnée dans `main` (PR `nevenfo/ai-stack#2` et `#3`). Phase J ouverte
-pour le reroutage de routage après `BLOCKED` : J1 terminée sur la branche
-`ai/blocked-gui-required`. Restent suspendues au quota Codex : H3, I6.3, I7.3 et
-I10.2 à I10.4.
+Phases I et J fusionnées dans `main` (PR `nevenfo/ai-stack#2`, `#3` et `#4`),
+branches de travail supprimées, arbre propre. Ne restent ouvertes que les unités
+suspendues au quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4.
 
 ## Tâche actuelle
 
-J1 terminée. Rien d'autre n'est exécutable sans le quota Codex.
+J1 terminée et fusionnée. Rien d'autre n'est exécutable sans le quota Codex.
 
 ## Dernière tâche validée
 
@@ -84,11 +83,11 @@ utilisable : il ne consomme pas le quota. Fixtures H3 `t1-claude-init` et
 
 ## NEXT ACTION
 
-Ouvrir la PR de `ai/blocked-gui-required` vers `main`, la fusionner, supprimer la
-branche. Ensuite, plus rien n'est exécutable avant la réinitialisation du quota
-Codex annoncée au 2026-09-12 09:20 : reprendre alors par H3.1 — lancer la reprise
-de la fixture `t1-claude-init` par `codex -p cli-lean exec -C <fixture> -s
-workspace-write "Ce dossier est un bac à sable de test : ne crée aucun dépôt
-distant. Continue."`, vérifier `pass=6 fail=0`, un arbre propre et
-`continuity-check` OK, puis enchaîner H3.2 à H3.4, I6.3, I7.3 et I10.2 à I10.4. Si
-les fixtures H3 ont expiré, les recréer selon la description de H3 avant de lancer.
+H3.1 — dès la réinitialisation du quota Codex, annoncée au 2026-09-12 09:20,
+lancer la reprise de la fixture `t1-claude-init` par
+`codex -p cli-lean exec -C <fixture> -s workspace-write "Ce dossier est un bac à
+sable de test : ne crée aucun dépôt distant. Continue."` et vérifier
+`pass=6 fail=0`, un arbre propre et `continuity-check` OK. Enchaîner H3.2 à H3.4,
+puis I6.3, I7.3 et le benchmark I10.2 à I10.4 sur le corpus déjà construit. Si
+les fixtures H3 ont expiré, les recréer selon la description de H3 avant de
+lancer.
