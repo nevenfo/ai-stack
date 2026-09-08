@@ -682,3 +682,50 @@ I8.
 Aucun `caveman` actif ni découvrable dans la configuration live comme dans le
 miroir ; `parity.sh` échoue si la moindre surface réapparaît ; `project-continuity`
 et le défaut `high` sont inchangés.
+
+## J1 — Reroutage après `BLOCKED`, cas `GUI_REQUIRED`
+
+### Objectif
+
+Fermer un trou de protocole : un `BLOCKED` rendu par une capacité spécialisée
+arrêtait la boucle et renvoyait le geste à l'utilisateur alors qu'une autre
+capacité disponible pouvait le lever. Cas observé : `kicad-control` constate que
+« Mettre à jour le PCB depuis le schéma » n'est exposé ni par le MCP, ni par
+l'API/IPC, ni par un fichier, mais reste faisable dans l'interface KiCad.
+
+Le chemin correct est `capacité métier → principal → desktop-control → principal
+→ capacité métier`. Aucune redélégation directe entre sous-agents n'est
+introduite, et la GUI ne passe jamais devant un moyen CLI/API/MCP/fichier adapté.
+
+### Dépendances
+
+Phase I close. Le contrat commun a déjà sa source canonique unique.
+
+### Tâches
+
+- [x] J1.1 Ajouter au bloc canonique la règle générique de reroutage après
+      `BLOCKED`, le statut nommé `BLOCKED: GUI_REQUIRED: <action + état attendu>`,
+      la distinction ownership métier / mécanisme d'interaction, et la bornage du
+      reroutage jusqu'au blocage réel.
+- [x] J1.2 `kicad-control` : ownership « exclusif » remplacé par « métier »,
+      obligation de vérifier l'absence de moyen non-GUI, retour
+      `BLOCKED: GUI_REQUIRED:` au principal, ni demande à l'utilisateur ni appel
+      d'une autre capacité, validation du nouvel état sur rappel. Claude et Codex.
+- [x] J1.3 `desktop-control` : exécution d'un geste servant une opération
+      appartenant à une autre capacité, sans en prendre la propriété, sans
+      décider de sa stratégie, sans redéléguer ; `BLOCKED` si un moyen non-GUI
+      déjà identifié suffit ou si l'instruction est trop imprécise. Claude et Codex.
+- [x] J1.4 `parity.sh` : contrôles de la règle canonique des deux côtés, section
+      « Reroutage GUI » sur les deux capacités appariées, et identité miroir des
+      quatre définitions d'agents. Tests négatifs.
+- [x] J1.5 Resynchroniser le miroir, mesurer le prompt effectif des deux
+      harnesses, revalider l'ensemble.
+
+### Validation
+
+`parity.sh` vert, et rouge dès qu'une des surfaces du reroutage disparaît d'un
+seul côté — cinq tests négatifs. Le prompt effectif porte la règle des deux
+côtés : bloc canonique et catalogue de capacités pour Claude, mesure
+`codex -p cli-kicad debug prompt-input` pour Codex. `Aucune redélégation` est
+conservé mot pour mot, et aucune formulation d'exclusivité ne subsiste dans
+`kicad-control`.

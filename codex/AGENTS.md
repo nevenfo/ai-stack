@@ -78,9 +78,26 @@ passent avant toute délégation.
 uniquement quand un contexte séparé sert réellement : exploration substantielle,
 tâche indépendante, parallélisation utile, outillage isolé, regard neuf, ou sortie
 volumineuse qui polluerait le principal. Jamais par principe. Aucune redélégation ;
-transmettre objectif, périmètre, ancres, contraintes, validation et format, jamais
-historique, raisonnement ou sortie brute. Le principal reste propriétaire des
-décisions, des validations et de Git.
+toute nouvelle délégation repasse par le principal ; transmettre objectif, périmètre,
+ancres, contraintes, validation et format, jamais historique, raisonnement ou sortie
+brute. Le principal reste propriétaire des décisions, des validations et de Git.
+
+Un `BLOCKED` rendu par une capacité spécialisée est un résultat de routage, pas une
+fin de course : avant de conclure à un blocage réel, le principal réévalue le routage
+et emploie toute capacité disponible capable d'en lever la cause. Cas nommé,
+`BLOCKED: GUI_REQUIRED: <action exacte + état attendu>` — la capacité métier a
+déterminé l'opération, vérifié que les moyens non-GUI pertinents ne l'exposent pas, et
+l'action reste faisable dans l'interface : le principal délègue le seul geste GUI à la
+capacité GUI, puis rappelle la capacité métier lorsque l'état obtenu doit être validé,
+et poursuit. Il ne fait pas faire à la main ce qu'une capacité disponible sait faire.
+
+Posséder un domaine, c'est en décider et le valider, non en monopoliser le mécanisme
+d'interaction : exécuter un geste pour le compte d'une capacité métier n'en rend
+jamais propriétaire, et la GUI ne passe jamais devant un moyen CLI/API/MCP/fichier
+adapté. Le reroutage reste borné — une même cause ne se rejoue qu'avec une information
+ou un état nouveau ; sans capacité restante, ou dès qu'une décision produit, un accès
+ou une confirmation humaine manque, le blocage est réel et se rend avec ce qui a été
+essayé ou écarté.
 
 Instructions permanentes minimales, contenu détaillé chargé à la demande. Ne jamais
 précharger un catalogue de capacités.
@@ -129,9 +146,12 @@ les mêmes capacités sous ses propres noms ; le contrat, lui, est identique.
   `UNCERTAIN`/`FAIL`, poursuis toi-même.
 - `network-owner` (sous-agent) : `pi-nas`, Tailscale, réseau et services associés.
 - `desktop-control` (sous-agent) : GUI Windows nécessaire sans meilleure
-  CLI/API/fichier.
-- `kicad-control` (sous-agent) : opération, inspection ou diagnostic direct d'un
-  projet KiCad ; le MCP KiCad n'entre jamais dans le principal.
+  CLI/API/fichier, y compris pour exécuter le geste d'un `BLOCKED: GUI_REQUIRED`
+  rendu par une autre capacité ; il n'en prend jamais le domaine.
+- `kicad-control` (sous-agent) : propriétaire métier des opérations, inspections et
+  diagnostics d'un projet KiCad ; le MCP KiCad n'entre jamais dans le principal. Le
+  geste GUI qu'il signale passe par `desktop-control`, sous ton orchestration, puis
+  lui revient pour validation.
 
 Sous-agent spécialisé : `fork_turns = "none"`.
 

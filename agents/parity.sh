@@ -32,6 +32,12 @@ CODEX_EFFORT="high"
 # Seules les valeurs sémantiques critiques et les fichiers du socle sont vérifiés.
 MIRROR="${PARITY_MIRROR:-$HOME_DIR/ai-stack}"
 
+# Capacités appariées : deux définitions natives distinctes, une seule sémantique.
+KC_CLAUDE="$HOME_DIR/.claude/agents/kicad-control.md"
+KC_CODEX="$HOME_DIR/.codex/agents/kicad-control.toml"
+DC_CLAUDE="$HOME_DIR/.claude/agents/desktop-control.md"
+DC_CODEX="$HOME_DIR/.codex/agents/desktop-control.toml"
+
 # Skills partagés : une seule copie physique, sous ~/.agents/skills.
 SHARED_SKILLS="project-continuity local-worker noa-local-agents"
 
@@ -100,6 +106,31 @@ check_both "Second Brain"         "jamais le wiki entier"
 check_both "handoff"              "sans adaptation ni transcript"
 check_both "frontière de session" "# Frontière de session"
 check_both "pas de métrique inventée" "jamais une estimation"
+check_both "délégation via le principal" "toute nouvelle délégation repasse par le principal"
+check_both "BLOCKED reroutable"     "est un résultat de routage"
+check_both "GUI_REQUIRED"           "BLOCKED: GUI_REQUIRED:"
+check_both "ownership vs mécanisme" "non en monopoliser le mécanisme"
+check_both "reroutage borné"        "Le reroutage reste borné"
+
+# Le contrat canonique décrit le reroutage ; encore faut-il que les deux capacités
+# concernées le portent réellement, et de la même façon des deux côtés.
+printf 'Reroutage GUI\n'
+pair() { # pair <libellé> <présent|absent> <motif> <fichier Claude> <fichier Codex>
+  local label="$1" want="$2" pat="$3" c=0 x=0
+  [ -f "$4" ] && grep -qF -- "$pat" "$4" && c=1
+  [ -f "$5" ] && grep -qF -- "$pat" "$5" && x=1
+  if [ "$want" = absent ]; then c=$((1-c)); x=$((1-x)); fi
+  if [ "$c" = 1 ] && [ "$x" = 1 ]; then ok "$label — Claude et Codex"
+  elif [ "$c" = 1 ]; then bad "$label — Claude seulement"
+  elif [ "$x" = 1 ]; then bad "$label — Codex seulement"
+  else bad "$label — aucun des deux côtés"; fi
+}
+pair "kicad-control : GUI_REQUIRED"        présent "BLOCKED: GUI_REQUIRED:" "$KC_CLAUDE" "$KC_CODEX"
+pair "kicad-control : ownership métier"    présent "propriétaire métier"    "$KC_CLAUDE" "$KC_CODEX"
+pair "kicad-control : sans redélégation"   absent  "desktop-control"        "$KC_CLAUDE" "$KC_CODEX"
+pair "kicad-control : sans exclusivité"    absent  "unique opérateur"       "$KC_CLAUDE" "$KC_CODEX"
+pair "desktop-control : geste délégué"     présent "sans prendre la propriété du domaine" "$DC_CLAUDE" "$DC_CODEX"
+pair "desktop-control : sans redélégation" présent "sans redéléguer"        "$DC_CLAUDE" "$DC_CODEX"
 
 printf 'Skills partagés\n'
 for s in $SHARED_SKILLS; do
@@ -146,6 +177,13 @@ else
   mirror_file "continuity-fixtures.sh" "agents/continuity-fixtures.sh" "$AGENTS_DIR/continuity-fixtures.sh"
   mirror_file "effort-bench/PROTOCOL.md" "agents/effort-bench/PROTOCOL.md" "$AGENTS_DIR/effort-bench/PROTOCOL.md"
   mirror_file "effort-bench/build-fixtures.sh" "agents/effort-bench/build-fixtures.sh" "$AGENTS_DIR/effort-bench/build-fixtures.sh"
+
+  # Capacités appariées : le miroir les copie telles quelles, une dérive de
+  # formulation y est donc détectable au même titre que dans le socle.
+  mirror_file "kicad-control (Claude)"   "claude/agents/kicad-control.md"    "$KC_CLAUDE"
+  mirror_file "kicad-control (Codex)"    "codex/agents/kicad-control.toml"   "$KC_CODEX"
+  mirror_file "desktop-control (Claude)" "claude/agents/desktop-control.md"  "$DC_CLAUDE"
+  mirror_file "desktop-control (Codex)"  "codex/agents/desktop-control.toml" "$DC_CODEX"
 
   # Valeurs sémantiques critiques. Les constantes ci-dessus sont l'attendu
   # commun : le live est contrôlé plus haut, le miroir l'est ici, si bien qu'une
