@@ -54,4 +54,3 @@ args = [
 
 [shell_environment_policy.set]
 CLAUDE_CONFIG_DIR = 'C:\Users\FlowUP\.codex\rtk-cli'
-

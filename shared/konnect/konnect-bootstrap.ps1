@@ -17,6 +17,21 @@ function Write-KonnectDiagnostic {
     [Console]::Error.WriteLine("[konnect-bootstrap] $Message")
 }
 
+function ConvertTo-KonnectInstant {
+    # ConvertFrom-Json may hand back a [datetime] rather than the raw ISO
+    # string. Casting that to [string] formats it in the current culture, and
+    # [DateTimeOffset]::Parse then reads it with the current culture too --
+    # which fails outright when the two disagree on day/month order. Take the
+    # value as it comes, and only parse when it really is a string.
+    param([Parameter(Mandatory = $true)]$Value)
+    if ($Value -is [DateTimeOffset]) { return $Value }
+    if ($Value -is [datetime]) { return [DateTimeOffset]::new($Value) }
+    return [DateTimeOffset]::Parse(
+        [string]$Value,
+        [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::RoundtripKind)
+}
+
 function ConvertTo-KonnectVersion {
     param([Parameter(Mandatory = $true)][string]$Value)
     if ($Value -notmatch '(?i)(?:^|\s)v?(\d+)\.(\d+)\.(\d+)(?:\s|$)') {
@@ -66,7 +81,7 @@ function Select-LatestStableRelease {
     $eligible = @($Releases | Where-Object {
         -not [bool]$_.draft -and -not [bool]$_.prerelease -and
         ([string]$_.tag_name -match '^v?\d+\.\d+\.\d+$') -and $_.published_at
-    } | Sort-Object { [DateTimeOffset]::Parse([string]$_.published_at) } -Descending)
+    } | Sort-Object { ConvertTo-KonnectInstant $_.published_at } -Descending)
     if ($eligible.Count -eq 0) { return $null }
     return $eligible[0]
 }
@@ -200,7 +215,7 @@ function Test-KonnectCacheCurrent {
     if (-not $Cache) { return $false }
     try {
         return ([string]$Cache.latest_version -ceq $LocalVersion) -and
-            (([DateTimeOffset]::UtcNow - [DateTimeOffset]::Parse([string]$Cache.checked_utc)) -lt $CheckInterval)
+            (([DateTimeOffset]::UtcNow - (ConvertTo-KonnectInstant $Cache.checked_utc)) -lt $CheckInterval)
     } catch {
         return $false
     }

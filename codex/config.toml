@@ -7,6 +7,7 @@ model_verbosity = "low"
 web_search = "disabled"
 tool_output_token_limit = 4000
 developer_instructions = "Réponds en français."
+service_tier = "default"
 
 notify = [ "C:\\Users\\FlowUP\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\<runtime-hash>\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
 
@@ -23,7 +24,7 @@ timeout = 3
 
 # NOA KPI: second SessionEnd hook, added 2026-09-04 ALONGSIDE conv-exporter,
 # never in its place. It ingests this session's rollout (and those of its
-# subagents) into <dépôt noa>/metrics/events.jsonl, then writes the session export.
+# subagents) into noa/metrics/events.jsonl, then writes the session export.
 # It always exits 0 and stays well inside the 3s budget: a KPI failure must
 # never colour the end of a Codex session.
 [[hooks.SessionEnd.hooks]]
@@ -33,12 +34,10 @@ command_windows = "python C:/Users/FlowUP/noa/hooks/codex_session_end.py"
 timeout = 3
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-10T19:22:15Z"
 source_type = "local"
 source = '\${USERPROFILE}\.codex\.tmp\bundled-marketplaces\openai-bundled'
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-08T13:24:25Z"
 source_type = "local"
 source = '\${USERPROFILE}\.cache\codex-runtimes\codex-primary-runtime\plugins\openai-primary-runtime'
 
@@ -66,40 +65,49 @@ enabled = true
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
 [features]
 js_repl = false
 
 [shell_environment_policy.set]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "<sha256>"
-NODE_REPL_TRUSTED_CODE_PATHS = 'C:\Users\FlowUP\.codex;C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_modules'
 
 [windows]
 sandbox = "elevated"
 
 [desktop]
 followUpQueueMode = "queue"
-conversationDetailMode = "STEPS_COMMANDS"
+conversationDetailMode = "STEPS_PROSE"
 
 [mcp_servers.node_repl]
+args = []
 command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
-startup_timeout_sec = 120.0
+startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.803.41515"
-CODEX_CLI_PATH = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\bin\<cli-hash>\codex.exe'
-CODEX_HOME = 'C:\Users\FlowUP\.codex'
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_modules'
 NODE_REPL_NODE_PATH = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node.exe'
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "<sha256>"
 NODE_REPL_TRUSTED_CODE_PATHS = 'C:\Users\FlowUP\.codex;C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_modules'
+CODEX_HOME = 'C:\Users\FlowUP\.codex'
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.908.70816"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"C:/Users/FlowUP/.codex/plugins/cache/openai-bundled/browser/26.908.70816/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_NATIVE_PIPE = "1"
 SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-<pipe-guid>'
+CODEX_CLI_PATH = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\bin\<cli-hash>\codex.exe'
 
 [mcp_servers.kicad-agentic-mcp]
 command = 'C:\Users\FlowUP\kicad-agentic-mcp\konnect-agentic\target\release\konnect.exe'

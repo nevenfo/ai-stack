@@ -3,37 +3,41 @@
 ## Phase actuelle
 
 Phases I et J fusionnées dans `main` (PR `nevenfo/ai-stack#2`, `#3` et `#4`),
-branches de travail supprimées, arbre propre. Ne restent ouvertes que les unités
-suspendues au quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4.
+branches de travail supprimées. Ne restent ouvertes que les unités suspendues au
+quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4. Le miroir a été resynchronisé sur
+la stack live le 2026-09-18.
 
 ## Tâche actuelle
 
-J1 terminée et fusionnée. Rien d'autre n'est exécutable sans le quota Codex.
+`export` du 2026-09-18 terminé. Deux dérives du live, reflétées fidèlement par le
+miroir, attendent une décision : voir « Blocage actif ».
 
 ## Dernière tâche validée
 
-J1 — un `BLOCKED` rendu par une capacité spécialisée n'arrête plus la boucle tant
-qu'une autre capacité peut le lever ; cas nommé `BLOCKED: GUI_REQUIRED:` routé par
-le principal vers `desktop-control`, puis rendu à la capacité métier pour
-validation.
+`export` — resynchronisation du miroir sur l'état réel des deux harnesses, du
+socle `~/.agents/` et des composants transverses.
 
 Validation :
 
-- `parity.sh` vert. Cinq tests négatifs, chacun cassant une seule surface :
-  `GUI_REQUIRED` retiré de `kicad-control` Claude, `desktop-control` cité dans
-  `kicad-control` Codex, interdiction de redéléguer retirée de `desktop-control`
-  Claude, paragraphe `BLOCKED` retiré de `CLAUDE.md`, miroir `desktop-control`
-  périmé — `FAIL` et exit 1 dans les cinq cas, `PARITÉ OK` après restauration.
-- Prompt effectif mesuré des deux côtés. Codex :
-  `codex -p cli-kicad debug prompt-input` porte les quatre motifs de la règle,
-  `Aucune redélégation`, et le catalogue à jour des deux capacités. Claude : bloc
-  canonique et descriptions `kicad-control` / `desktop-control` à jour dans le
-  contexte chargé.
-- `Aucune redélégation` conservé mot pour mot ; plus aucune formulation
-  d'exclusivité dans `kicad-control` — le contrôle l'exige comme une absence.
-- Dérive prise au vol : le miroir portait encore l'ancienne `description` de
-  `desktop-control` des deux côtés. `parity.sh` ne comparait aucune définition
-  d'agent au live ; il exige désormais l'identité des quatre.
+- `parity.sh` vert et `continuity-check.sh .` vert après resynchronisation.
+- Diff intégral relu. Seconde passe : aucun secret, aucune empreinte machine
+  résiduelle (`<runtime-hash>`, `<cli-hash>`, `<sha256>`, `<pipe-guid>`), aucun
+  `.bak`, aucune table `[projects.*]` ni `[hooks.state]`.
+- Sept fichiers actualisés : `codex/config.toml` (`service_tier`, trois plugins
+  `codex-app-tools` / `unified-computer-use` / `computer-use` activés,
+  `conversationDetailMode = STEPS_PROSE`, environnement `node_repl` du nouveau
+  runtime), `codex/cli-lean.config.toml`, `codex/cli-kicad.config.toml`,
+  `codex/version.json` (0.154.0), `claude/plugins/known_marketplaces.json`,
+  `shared/konnect/konnect-bootstrap.ps1` (correctif de culture sur les dates de
+  release, CRLF conservé par `.gitattributes`),
+  `shared/local-worker/HARNESS_INTEGRATION.md`.
+- Côté Claude — `CLAUDE.md`, `settings.json`, agents, hooks, skills, plugins — et
+  socle `~/.agents/` déjà identiques au live : aucune écriture.
+- Commits épinglés de `noa`, `conv-exporter` et `local-worker` inchangés.
+- Écartés comme état ou contenu fournisseur : `~/.claude/.claude.json` et
+  `~/.codex/rtk-cli/.claude.json` (identité machine, caches), `skills/synced/` et
+  `plugins/synced/`, `~/.codex/skills/.system/`, `~/.claude/skills/.trash/`,
+  marketplaces en cache, journaux et bases SQLite.
 
 ## Décisions actives
 
@@ -48,10 +52,13 @@ Validation :
 - `~/.agents/` est le socle canonique. Le miroir le représente dans `agents/`,
   copie physique donc surface de dérive : `parity.sh` en exige l'identité, pour le
   socle comme pour les quatre définitions d'agents appariées.
-- Le miroir n'est jamais comparé brut au live : `codex/config.toml` y normalise
-  les tables `[projects.*]` et omet `[hooks.state]`.
-- Côté Claude, `/model` persiste son choix dans `settings.json` : défaut et
-  dernier choix de session sont un seul champ.
+- Le miroir n'est jamais comparé brut au live : il omet `[projects.*]`,
+  `[hooks.state]` et `[tui.model_availability_nux]`, et normalise les empreintes.
+- Le miroir reflète le live, il ne le corrige pas : une dérive constatée est
+  reflétée puis signalée, jamais maquillée.
+- Les deux clients persistent un choix de session dans leur configuration :
+  `/model` dans `~/.claude/settings.json` côté Claude, modèle et effort dans le
+  profil `cli-lean` côté Codex. `parity.sh` ne couvre que la base Codex.
 - Une tâche déclarée validée porte une preuve listée sous `Validation :`.
 - Un profil Codex se superpose à la base : il ne masque que ce qu'il redéfinit.
 - `codex debug prompt-input` est l'instrument de mesure ; `-p` et les options
@@ -66,28 +73,37 @@ Validation :
 
 ## Blocage actif
 
-Quota Codex épuisé le 2026-09-07, réinitialisation annoncée au 2026-09-12 09:20.
-Il bloque H3, I6.3, I7.3 et le benchmark I10.2 à I10.4. `debug prompt-input` reste
-utilisable : il ne consomme pas le quota. Fixtures H3 `t1-claude-init` et
-`t5-degrade` dans le scratchpad de session ; corpus I10 dans `agents/effort-bench/`.
+Deux décisions utilisateur, révélées par l'`export` du 2026-09-18 :
+
+1. Le profil `cli-lean` live est repassé à `gpt-5.6-sol` / `medium` — l'état que
+   A2.3 avait nommé comme défaut — alors que la base Codex reste `gpt-6-astra` /
+   `high`. Le client l'a réécrit en y persistant un choix de session. À trancher :
+   restaurer `gpt-6-astra` / `high` dans le profil, ou assumer un profil de coding
+   plus léger et l'inscrire dans `README.md`.
+2. `HARNESS_INTEGRATION.md` du dépôt `local-worker` mentionne encore Antigravity
+   comme troisième harness. La correction appartient à ce dépôt, pas à `ai-stack`.
+
+Le quota Codex, épuisé le 2026-09-07, était annoncé en réinitialisation au
+2026-09-12 09:20 ; il n'a pas été revérifié. Fixtures H3 `t1-claude-init` et
+`t5-degrade` très probablement expirées avec leur scratchpad de session ; corpus
+I10 dans `agents/effort-bench/`.
 
 ## Fichiers / zones utiles
 
 - Socle : `~/.agents/` — `CONTRACT.md`, `parity.sh`, `continuity-check.sh`,
-  `continuity-fixtures.sh`, `effort-bench/`, `skills/`.
+  `continuity-fixtures.sh`, `effort-bench/`, `skills/`, `konnect/`.
 - Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`,
   les profils `cli-lean` / `cli-kicad`, et les définitions appariées
   `~/.claude/agents/{kicad,desktop}-control.md`,
   `~/.codex/agents/{kicad,desktop}-control.toml`.
-- Dépôt : `agents/`, `claude/agents/`, `codex/agents/`, `README.md`, `AGENTS.md`.
+- Dépôt : `agents/`, `claude/`, `codex/`, `shared/`, `README.md`, `AGENTS.md`.
 
 ## NEXT ACTION
 
-H3.1 — dès la réinitialisation du quota Codex, annoncée au 2026-09-12 09:20,
-lancer la reprise de la fixture `t1-claude-init` par
+H3.1 — vérifier d'abord que le quota Codex est rétabli, puis recréer les fixtures
+H3 selon la description de H3 dans `plan.md` (celles du scratchpad de session ont
+expiré) et lancer la reprise de `t1-claude-init` par
 `codex -p cli-lean exec -C <fixture> -s workspace-write "Ce dossier est un bac à
-sable de test : ne crée aucun dépôt distant. Continue."` et vérifier
+sable de test : ne crée aucun dépôt distant. Continue."`, en vérifiant
 `pass=6 fail=0`, un arbre propre et `continuity-check` OK. Enchaîner H3.2 à H3.4,
-puis I6.3, I7.3 et le benchmark I10.2 à I10.4 sur le corpus déjà construit. Si
-les fixtures H3 ont expiré, les recréer selon la description de H3 avant de
-lancer.
+puis I6.3, I7.3 et le benchmark I10.2 à I10.4 sur le corpus déjà construit.
