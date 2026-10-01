@@ -46,6 +46,11 @@ manque ; un blocage résiste au diagnostic ; aucune action sûre ne reste ; ou u
 frontière de session impose un handoff, l'état persistant permettant alors une
 reprise non ambiguë.
 
+Un test rouge, une commande échouée, un build cassé, un outil indisponible ou une
+première approche infructueuse ne sont pas en eux-mêmes des raisons d'arrêt :
+diagnostiquer, corriger, revalider et utiliser une alternative disponible. Ne déclarer
+un blocage qu'après diagnostic borné, sans nouvelle information ni capacité utile.
+
 Chercher les commandes de validation dans les manifestes, scripts, CI, README et
 conventions du projet, puis n'exécuter que celles qui concernent la tâche. Une tâche
 n'est terminée que lorsque sa validation est réellement passée.
@@ -75,12 +80,19 @@ principal localisé. `rg`, `fd`, Git, tests, CLI et API officielles, lecture cib
 passent avant toute délégation.
 
 0–1 sous-agent par défaut, 2 seulement si indépendants et rentables. Déléguer
-uniquement quand un contexte séparé sert réellement : exploration substantielle,
-tâche indépendante, parallélisation utile, outillage isolé, regard neuf, ou sortie
-volumineuse qui polluerait le principal. Jamais par principe. Aucune redélégation ;
-toute nouvelle délégation repasse par le principal ; transmettre objectif, périmètre,
-ancres, contraintes, validation et format, jamais historique, raisonnement ou sortie
-brute. Le principal reste propriétaire des décisions, des validations et de Git.
+quand le bénéfice net dépasse le coût du handoff : surtout pour isoler un contexte
+d'exécution jetable — lectures multi-fichiers, exploration substantielle, builds,
+tests/logs, boucles diagnostic-correction — ou pour une tâche indépendante,
+parallélisable, un outillage isolé ou un regard neuf. Les tâches courtes, fortement
+séquentielles ou nécessitant des écritures partagées fréquentes restent au principal.
+Pour une unité de code autonome substantielle, privilégier `code-worker` dès que son
+exécution séparée évite de polluer le contexte principal ; sa taille « petite » ou
+« moyenne » ne suffit pas à écarter la délégation. Optimiser les tokens jusqu'au
+checkpoint validé, pas ceux d'un seul tour. Jamais déléguer par principe. Aucune
+redélégation ; toute nouvelle délégation repasse par le principal ; transmettre
+objectif, périmètre, ancres, contraintes, validation et format, jamais historique,
+raisonnement ou sortie brute. Le principal reste propriétaire des décisions, des
+validations et de Git.
 
 Un `BLOCKED` rendu par une capacité spécialisée est un résultat de routage, pas une
 fin de course : avant de conclure à un blocage réel, le principal réévalue le routage
