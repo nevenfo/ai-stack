@@ -10,7 +10,7 @@ d'autre : ni moteur d'export, ni base d'état, ni copie de projets, ni corpus.
 ## Structure
 
 ```
-agents/        socle canonique commun     (CONTRACT.md, parity.sh, skills partagés)
+agents/        socle canonique commun     (CONTRACT.md, skills partagés)
 claude/        configuration Claude Code  (CLAUDE.md, settings, agents, hooks, plugins)
 codex/         configuration Codex CLI    (AGENTS.md, config.toml, profils, agents)
 shared/        ressources transverses     (konnect, lmstudio, rtk, powershell,
@@ -25,7 +25,7 @@ les skills que les deux harnesses chargent. Sur la machine il vit dans
 `~/.agents/` ; Claude Code y accède par des jonctions depuis `~/.claude/skills/`,
 Codex le lit nativement.
 
-## Parité Claude / Codex
+## Contrat commun Claude / Codex
 
 Un projet appartient à `GitHub + plan.md + progress.md + code/tests`, jamais à un
 harness. On peut le commencer avec l'un, le continuer avec l'autre, revenir au
@@ -54,20 +54,10 @@ premier, sans reconstruire son état à la main.
 | Web hors du principal | hook de refus | `web_search = "disabled"` | divergence légitime : deux mécanismes natifs |
 
 ```bash
-bash agents/parity.sh                   # vérifie ; sort en erreur si un côté a divergé
-bash agents/parity.sh --fix             # réinjecte le bloc canonique dans les deux
 bash agents/continuity-check.sh <dir>   # forme de plan.md / progress.md
 bash agents/continuity-fixtures.sh      # prouve que le contrôle ci-dessus sait échouer
 bash agents/effort-bench/build-fixtures.sh <dir>   # corpus du benchmark d'effort
 ```
-
-Le contrôle porte sur les deux configurations live **et** sur ce dépôt. Il ne
-compare pas les fichiers brut à brut — le miroir normalise volontairement les
-chemins de projets et les empreintes machine — mais il exige l'identité des
-fichiers du socle et l'égalité des valeurs sémantiques critiques : modèle et
-effort des deux côtés, états critiques de plugins et de MCP. Un miroir périmé
-échoue donc au même titre qu'un harness qui dérive. `PARITY_MIRROR` désigne le
-dépôt si celui-ci ne se trouve pas dans `~/ai-stack`.
 
 Attention à une source de dérive : côté Claude Code, `/model` écrit le modèle
 choisi dans `~/.claude/settings.json` et l'y laisse. Ce champ est donc à la fois
@@ -82,15 +72,15 @@ système et ses serveurs MCP. Hors PowerShell, le profil se passe explicitement 
 `codex -p cli-lean exec …`. Seules les commandes runtime, `codex mcp` et
 `codex debug prompt-input` acceptent `--profile`.
 
-Le contrat commun ne s'édite que dans `agents/CONTRACT.md`, jamais directement dans
-un harness : `parity.sh` rattraperait la modification à la vérification suivante.
+Le contrat commun ne s'édite que dans `agents/CONTRACT.md`. Toute modification doit
+ensuite être répercutée dans `claude/CLAUDE.md` et `codex/AGENTS.md` sans divergence.
 
 ## `export`
 
 Depuis la racine, l'intention `export` demande à Claude Code ou à Codex d'inspecter
 la machine en lecture seule, de décider par raisonnement de ce qui appartient à la
 configuration de la stack, de resynchroniser ce dépôt, de relire le diff, de
-vérifier l'absence de secret et la parité, puis de committer et pousser sur `main`.
+vérifier l'absence de secret et la cohérence du contrat commun, puis de committer et pousser sur `main`.
 
 Le contrat complet est dans [`AGENTS.md`](AGENTS.md). `CLAUDE.md` s'y résume à
 `@AGENTS.md`.
