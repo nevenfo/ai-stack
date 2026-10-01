@@ -2,22 +2,25 @@
 
 ## Phase actuelle
 
-Phases I et J fusionnées dans main (PR nevenfo/ai-stack#2, #3 et #4). I6 est clos le 2026-10-01 après validation live du routage KiCad Codex. Restent ouvertes H3, I7.3 et I10.2 à I10.4.
+Phases I et J fusionnées dans main (PR nevenfo/ai-stack#2, #3 et #4). I6 est clos le 2026-10-01. Restent ouvertes H3, I7.3 et I10.2 à I10.4.
+
 ## Tâche actuelle
 
-Correction et validation de l'isolation KiCad/Codex terminées le 2026-10-01 ; miroir resynchronisé sur le live corrigé.
+Export complet du live vers ai-stack terminé le 2026-10-01 ; miroir resynchronisé et validé pour main.
+
 ## Dernière tâche validée
 
-I6.3 — routage KiCad fonctionnel et borné.
+export — reconstruction du miroir à partir de la stack live actuelle.
 
 Validation :
 
-- Claude : kicad-control conserve son MCP Konnect privé ; appel mcp__konnect__kicad_describe réussi.
-- Codex 0.159.2 : base et cli-lean n'exposent plus aucun MCP KiCad ; cli-kicad expose uniquement konnect via ~/.agents/konnect/konnect-bootstrap.ps1.
-- Test réel Codex : cli-kicad → kicad-control → kicad_describe retourne OK, sans appel MCP par le principal.
-- code-worker Claude et Codex ont été smoke-testés séparément ; le rôle et ses instructions personnalisées sont effectivement chargés.
-- Konnect installé = 1.2.0 ; dernière release stable du dépôt nevenfo/kicad-agentic-mcp = v1.2.0. Le bootstrap vérifie les releases stables avec cache d'une heure et rollback.
-- Limitation upstream confirmée dans le code Codex 0.159.3 : un rôle ne peut pas ajouter de mcp_servers absents du parent. Le contournement reste donc strictement limité au profil cli-kicad.
+- Socle ~/.agents, agents/skills/hooks Claude et agents Codex : identité vérifiée avec le miroir, hors backups/caches/synced.
+- Codex : base, cli-lean et cli-kicad alignés sémantiquement ; projects.*, hooks.state, état TUI et empreintes runtime restent exclus ou normalisés.
+- MCP runtime vérifiés : aucun KiCad dans base/cli-lean ; un seul Konnect dans cli-kicad ; Claude conserve uniquement ses MCP globaux natifs.
+- Composants essaimés NOA, conv-exporter et local-worker : commits live égaux aux commits épinglés et copies d'intégration identiques.
+- Second Brain, PowerShell et LM Studio : surfaces suivies identiques au miroir.
+- Dérives exportées : template ~/.rtk/filters.toml et métadonnée du marketplace Claude, avec lastUpdated normalisé car volatil.
+
 ## Décisions actives
 
 - Deux harnesses pairs. Aucun fallback, aucun propriétaire de projet.

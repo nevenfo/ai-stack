@@ -1,12 +1,13 @@
-# User-global RTK filters — apply to all your projects.
-# Project-local .rtk/filters.toml takes precedence over these.
+# Project-local RTK filters — commit this file with your repo.
+# Filters here override user-global and built-in filters.
 # Docs: https://github.com/rtk-ai/rtk#custom-filters
 schema_version = 1
 
-# Example: suppress noise from a tool you use everywhere
-# [filters.my-global-tool]
-# description = "Compact my-global-tool output"
-# match_command = "^my-global-tool\\b"
+# Example: suppress build noise from a custom tool
+# [filters.my-tool]
+# description = "Compact my-tool output"
+# match_command = "^my-tool\\s+build"
 # strip_ansi = true
-# strip_lines_matching = ["^\\s*$"]
-# max_lines = 40
+# strip_lines_matching = ["^\\s*$", "^Downloading", "^Installing"]
+# max_lines = 30
+# on_empty = "my-tool: ok"
