@@ -108,7 +108,3 @@ NODE_REPL_TRUSTED_SERVICES = '{"browser":"C:/Users/FlowUP/.codex/plugins/cache/o
 SKY_CUA_NATIVE_PIPE = "1"
 SKY_CUA_NATIVE_PIPE_DIRECTORY = '\\.\pipe\codex-computer-use-<pipe-guid>'
 CODEX_CLI_PATH = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\bin\<cli-hash>\codex.exe'
-
-[mcp_servers.kicad-agentic-mcp]
-command = 'C:\Users\FlowUP\kicad-agentic-mcp\konnect-agentic\target\release\konnect.exe'
-args = ["--document-type", "schematic"]

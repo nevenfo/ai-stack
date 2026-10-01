@@ -2,43 +2,22 @@
 
 ## Phase actuelle
 
-Phases I et J fusionnées dans `main` (PR `nevenfo/ai-stack#2`, `#3` et `#4`),
-branches de travail supprimées. Ne restent ouvertes que les unités suspendues au
-quota Codex : H3, I6.3, I7.3 et I10.2 à I10.4. Le miroir a été resynchronisé sur
-la stack live le 2026-09-18.
-
+Phases I et J fusionnées dans main (PR nevenfo/ai-stack#2, #3 et #4). I6 est clos le 2026-10-01 après validation live du routage KiCad Codex. Restent ouvertes H3, I7.3 et I10.2 à I10.4.
 ## Tâche actuelle
 
-`export` du 2026-09-18 terminé. Deux dérives du live, reflétées fidèlement par le
-miroir, attendent une décision : voir « Blocage actif ».
-
+Correction et validation de l'isolation KiCad/Codex terminées le 2026-10-01 ; miroir resynchronisé sur le live corrigé.
 ## Dernière tâche validée
 
-`export` — resynchronisation du miroir sur l'état réel des deux harnesses, du
-socle `~/.agents/` et des composants transverses.
+I6.3 — routage KiCad fonctionnel et borné.
 
 Validation :
 
-- `parity.sh` vert et `continuity-check.sh .` vert après resynchronisation.
-- Diff intégral relu. Seconde passe : aucun secret, aucune empreinte machine
-  résiduelle (`<runtime-hash>`, `<cli-hash>`, `<sha256>`, `<pipe-guid>`), aucun
-  `.bak`, aucune table `[projects.*]` ni `[hooks.state]`.
-- Sept fichiers actualisés : `codex/config.toml` (`service_tier`, trois plugins
-  `codex-app-tools` / `unified-computer-use` / `computer-use` activés,
-  `conversationDetailMode = STEPS_PROSE`, environnement `node_repl` du nouveau
-  runtime), `codex/cli-lean.config.toml`, `codex/cli-kicad.config.toml`,
-  `codex/version.json` (0.154.0), `claude/plugins/known_marketplaces.json`,
-  `shared/konnect/konnect-bootstrap.ps1` (correctif de culture sur les dates de
-  release, CRLF conservé par `.gitattributes`),
-  `shared/local-worker/HARNESS_INTEGRATION.md`.
-- Côté Claude — `CLAUDE.md`, `settings.json`, agents, hooks, skills, plugins — et
-  socle `~/.agents/` déjà identiques au live : aucune écriture.
-- Commits épinglés de `noa`, `conv-exporter` et `local-worker` inchangés.
-- Écartés comme état ou contenu fournisseur : `~/.claude/.claude.json` et
-  `~/.codex/rtk-cli/.claude.json` (identité machine, caches), `skills/synced/` et
-  `plugins/synced/`, `~/.codex/skills/.system/`, `~/.claude/skills/.trash/`,
-  marketplaces en cache, journaux et bases SQLite.
-
+- Claude : kicad-control conserve son MCP Konnect privé ; appel mcp__konnect__kicad_describe réussi.
+- Codex 0.159.2 : base et cli-lean n'exposent plus aucun MCP KiCad ; cli-kicad expose uniquement konnect via ~/.agents/konnect/konnect-bootstrap.ps1.
+- Test réel Codex : cli-kicad → kicad-control → kicad_describe retourne OK, sans appel MCP par le principal.
+- code-worker Claude et Codex ont été smoke-testés séparément ; le rôle et ses instructions personnalisées sont effectivement chargés.
+- Konnect installé = 1.2.0 ; dernière release stable du dépôt nevenfo/kicad-agentic-mcp = v1.2.0. Le bootstrap vérifie les releases stables avec cache d'une heure et rollback.
+- Limitation upstream confirmée dans le code Codex 0.159.3 : un rôle ne peut pas ajouter de mcp_servers absents du parent. Le contournement reste donc strictement limité au profil cli-kicad.
 ## Décisions actives
 
 - Deux harnesses pairs. Aucun fallback, aucun propriétaire de projet.
@@ -60,11 +39,11 @@ Validation :
   `/model` dans `~/.claude/settings.json` côté Claude, modèle et effort dans le
   profil `cli-lean` côté Codex. `parity.sh` ne couvre que la base Codex.
 - Une tâche déclarée validée porte une preuve listée sous `Validation :`.
-- Un profil Codex se superpose à la base : il ne masque que ce qu'il redéfinit.
+- Un profil Codex se superpose à la base : cli-lean fixe explicitement gpt-6-sol / medium ; cli-kicad fixe explicitement gpt-6-astra / high.
 - `codex debug prompt-input` est l'instrument de mesure ; `-p` et les options
   globales précèdent `debug`. Hors PowerShell, `codex exec` retombe sur la base :
   `-p cli-lean` est explicite, H3 compris.
-- Le workaround d'héritage MCP reste borné à `cli-kicad`. Signal de levée : I6.3.
+- Le workaround MCP Codex reste borné à cli-kicad : le parent voit Konnect uniquement pour que kicad-control l'hérite, mais ses instructions lui interdisent tout appel direct. Signal de levée : une version Codex où un rôle peut ajouter un MCP absent du parent + smoke test privé réussi.
 - Caveman est retiré, non désactivé. Défaut `high` conservé tant que I10 n'est pas
   exécuté. Aucune métrique inventée.
 - Points de retour : tag `pre-parity-refactor-20260907`, sauvegardes
@@ -73,21 +52,13 @@ Validation :
 
 ## Blocage actif
 
-Deux décisions utilisateur, révélées par l'`export` du 2026-09-18 :
+Aucun blocage actif sur code-worker ni sur KiCad.
 
-1. Le profil `cli-lean` live est repassé à `gpt-5.6-sol` / `medium` — l'état que
-   A2.3 avait nommé comme défaut — alors que la base Codex reste `gpt-6-astra` /
-   `high`. Le client l'a réécrit en y persistant un choix de session. À trancher :
-   restaurer `gpt-6-astra` / `high` dans le profil, ou assumer un profil de coding
-   plus léger et l'inscrire dans `README.md`.
-2. `HARNESS_INTEGRATION.md` du dépôt `local-worker` mentionne encore Antigravity
-   comme troisième harness. La correction appartient à ce dépôt, pas à `ai-stack`.
+Limitation connue, non bloquante : Codex 0.159.x ne permet pas à kicad-control d'ajouter seul Konnect si le parent ne l'a pas. Le workaround validé reste strictement dans cli-kicad. La base et cli-lean restent sans KiCad.
 
-Le quota Codex, épuisé le 2026-09-07, était annoncé en réinitialisation au
-2026-09-12 09:20 ; il n'a pas été revérifié. Fixtures H3 `t1-claude-init` et
-`t5-degrade` très probablement expirées avec leur scratchpad de session ; corpus
-I10 dans `agents/effort-bench/`.
+Point indépendant encore à traiter dans son dépôt propriétaire : HARNESS_INTEGRATION.md de local-worker mentionne encore Antigravity comme troisième harness.
 
+Le quota Codex est rétabli : les smoke tests Codex du 2026-10-01 ont exécuté normalement des sessions cli-lean et cli-kicad.
 ## Fichiers / zones utiles
 
 - Socle : `~/.agents/` — `CONTRACT.md`, `parity.sh`, `continuity-check.sh`,
@@ -100,10 +71,4 @@ I10 dans `agents/effort-bench/`.
 
 ## NEXT ACTION
 
-H3.1 — vérifier d'abord que le quota Codex est rétabli, puis recréer les fixtures
-H3 selon la description de H3 dans `plan.md` (celles du scratchpad de session ont
-expiré) et lancer la reprise de `t1-claude-init` par
-`codex -p cli-lean exec -C <fixture> -s workspace-write "Ce dossier est un bac à
-sable de test : ne crée aucun dépôt distant. Continue."`, en vérifiant
-`pass=6 fail=0`, un arbre propre et `continuity-check` OK. Enchaîner H3.2 à H3.4,
-puis I6.3, I7.3 et le benchmark I10.2 à I10.4 sur le corpus déjà construit.
+H3.1 — recréer les fixtures H3 selon la description de H3 dans plan.md puis lancer la reprise de t1-claude-init par codex -p cli-lean exec -C <fixture> -s workspace-write avec la consigne de bac à sable, en vérifiant pass=6 fail=0, un arbre propre et continuity-check OK. Enchaîner H3.2 à H3.4, puis I7.3 et le benchmark I10.2 à I10.4.

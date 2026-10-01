@@ -513,7 +513,7 @@ si techniquement possible.
 
 ### Objectif
 
-Le principal délègue à `kicad-control`, qui porte seul le MCP KiCad.
+Le principal délègue toute opération KiCad à `kicad-control`. Claude porte le MCP uniquement dans ce sous-agent. Codex 0.159.x interdit à un rôle d'ajouter un MCP absent du parent : le contournement minimal expose donc Konnect uniquement dans le profil spécialisé `cli-kicad`, avec interdiction au principal de l'appeler directement ; le child l'hérite.
 
 ### Dépendances
 
@@ -525,7 +525,7 @@ I4.
       limitation d'héritage MCP des sous-agents.
 - [x] I6.2 Retirer l'exposition globale, ou la restreindre strictement aux
       profils KiCad avec la raison exacte et le signal de levée du contournement.
-- [ ] I6.3 Sous quota Codex, prouver fonctionnellement qu'une tâche KiCad
+- [x] I6.3 Sous quota Codex, prouver fonctionnellement qu'une tâche KiCad
       aboutit encore via l'agent `kicad-control`, profil `cli-kicad`.
 
 ### Validation
@@ -533,6 +533,8 @@ I4.
 Session de coding sans MCP KiCad visible, tâche KiCad fonctionnelle via
 `kicad-control`, aucune perte de capacité, coût de découverte mesuré avant et
 après si le client l'expose.
+
+Validation 2026-10-01 : base et `cli-lean` sans MCP KiCad ; `cli-kicad` expose un unique `konnect` via le bootstrap de release ; délégation réelle `cli-kicad → kicad-control → kicad_describe` = `OK`. Le code source Codex 0.159.3 confirme que les `mcp_servers` d'un rôle ne peuvent pas étendre l'autorité du parent ; supprimer le contournement seulement lorsque ce comportement upstream change et que le même smoke test passe sans MCP parent.
 
 ## I7 — Mesure intermédiaire
 

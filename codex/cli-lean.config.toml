@@ -4,7 +4,7 @@
 approval_policy = "never"
 sandbox_mode = "workspace-write"
 web_search = "disabled"
-model = "gpt-5.6-sol"
+model = "gpt-6-sol"
 model_reasoning_effort = "medium"
 
 [agents]
@@ -41,14 +41,6 @@ enabled = false
 command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
 enabled = false
 
-# kicad-agentic-mcp est déclaré par la base, pour Codex Desktop et pour le
-# profil KiCad. Une session de coding n'en a aucun usage : elle délègue à
-# l'agent kicad-control, qui porte son propre MCP. Sans cette table le serveur
-# resterait actif, un profil ne masquant que ce qu'il redéfinit.
-[mcp_servers.kicad-agentic-mcp]
-command = 'C:\Users\FlowUP\kicad-agentic-mcp\konnect-agentic\target\release\konnect.exe'
-args = ["--document-type", "schematic"]
-enabled = false
 
 [shell_environment_policy.set]
 CLAUDE_CONFIG_DIR = 'C:\Users\FlowUP\.codex\rtk-cli'

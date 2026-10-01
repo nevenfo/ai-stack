@@ -4,6 +4,10 @@
 approval_policy = "never"
 sandbox_mode = "workspace-write"
 web_search = "disabled"
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+model_verbosity = "low"
+developer_instructions = """Réponds en français. Dans ce profil KiCad, Konnect est exposé au parent uniquement parce que Codex 0.159.x n'autorise pas un rôle à ajouter un MCP absent du parent. Le principal ne doit jamais appeler Konnect directement : toute inspection, opération ou diagnostic KiCad doit être délégué à kicad-control. Le sous-agent hérite alors du MCP et valide le résultat."""
 
 [agents]
 enabled = true
@@ -39,8 +43,10 @@ enabled = false
 command = 'C:\Users\FlowUP\AppData\Local\OpenAI\Codex\runtimes\cua_node\<runtime-hash>\bin\node_repl.exe'
 enabled = false
 
-# Temporary workaround for Codex subagent-private MCP inheritance bug.
-# Remove parent Konnect exposure when upstream behavior is fixed and validated.
+# Codex 0.159.x retire des rôles les MCP absents du parent : Konnect est donc
+# exposé uniquement dans ce profil spécialisé pour que kicad-control l'hérite.
+# Le principal a interdiction de l'appeler directement. Retirer ce contournement
+# dès que Codex autorise un MCP privé de rôle sans exposition parent.
 [mcp_servers.konnect]
 command = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 args = [

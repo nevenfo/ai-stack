@@ -49,7 +49,7 @@ premier, sans reconstruire son état à la main.
 | politique Second Brain | ✓ | ✓ | bloc canonique |
 | handoff de session | ✓ | ✓ | `project-continuity` |
 | protocole `project-continuity` | ✓ | ✓ | `agents/skills/`, un seul fichier |
-| qualité de modèle visée | `opus` + `high` | `gpt-6-astra` + `high` | divergence légitime : fournisseurs différents |
+| modèles effectifs par défaut | opus + high | coding : gpt-6-sol + medium ; KiCad : gpt-6-astra + high | profils explicites par charge de travail |
 | filtrage RTK des sorties | hook `PreToolUse` | appel explicite `rtk` | divergence légitime : Codex n'a pas de hook équivalent |
 | Web hors du principal | hook de refus | `web_search = "disabled"` | divergence légitime : deux mécanismes natifs |
 
@@ -75,13 +75,7 @@ le défaut persisté et le dernier choix de session — un `/model sonnet` ponct
 devient le nouveau défaut. C'est ainsi que le miroir a affirmé `sonnet` alors
 que la stack visait `opus`.
 
-Côté Codex, le profil de coding `cli-lean` n'est appliqué que par la fonction
-`codex` du profil PowerShell. Un appel venu d'ailleurs — Git Bash, un script, un
-autre agent — retombe sur la configuration de base, avec ses plugins, ses skills
-système et ses serveurs MCP. Hors PowerShell, le profil se passe explicitement :
-`codex -p cli-lean exec …`. Seules les commandes runtime, `codex mcp` et
-`codex debug prompt-input` acceptent `--profile`.
-
+Côté Codex, la fonction codex du profil PowerShell choisit cli-lean par défaut et cli-kicad lorsqu'un *.kicad_pro est détecté dans le dossier courant ou un parent borné. cli-lean ne charge aucun MCP KiCad. Codex 0.159.x interdit à un rôle d'ajouter un MCP absent du parent ; cli-kicad expose donc un unique konnect via le bootstrap de release pour que kicad-control l'hérite, tout en interdisant au principal de l'appeler directement. Un appel Codex venu d'ailleurs — Git Bash, un script, un autre agent — retombe sur la configuration de base ; le profil doit alors être passé explicitement (-p cli-lean ou -p cli-kicad). Seules les commandes runtime, codex mcp et codex debug prompt-input acceptent --profile.
 Le contrat commun ne s'édite que dans `agents/CONTRACT.md`, jamais directement dans
 un harness : `parity.sh` rattraperait la modification à la vérification suivante.
 
