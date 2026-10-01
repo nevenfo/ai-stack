@@ -2,28 +2,29 @@
 
 ## Phase actuelle
 
-Phases I et J fusionnées dans main (PR nevenfo/ai-stack#2, #3 et #4). I6 est clos le 2026-10-01. Restent ouvertes H3, I7.3 et I10.2 à I10.4.
+Phases I et J fusionnées dans main (PR nevenfo/ai-stack#2, #3 et #4). I6 et I13 sont clos le 2026-10-01. Restent ouvertes H3, I7.3 et I10.2 à I10.4.
 
 ## Tâche actuelle
 
-Export complet du live vers ai-stack terminé le 2026-10-01 ; miroir resynchronisé et validé pour main.
+I13 clos : routage recentré sur l'isolation du contexte jetable et autonomie renforcée ; retour à H3.1.
 
 ## Dernière tâche validée
 
-export — reconstruction du miroir à partir de la stack live actuelle.
+I13 — routage par isolation contextuelle et autonomie bornée.
 
 Validation :
 
-- Socle ~/.agents, agents/skills/hooks Claude et agents Codex : identité vérifiée avec le miroir, hors backups/caches/synced.
-- Codex : base, cli-lean et cli-kicad alignés sémantiquement ; projects.*, hooks.state, état TUI et empreintes runtime restent exclus ou normalisés.
-- MCP runtime vérifiés : aucun KiCad dans base/cli-lean ; un seul Konnect dans cli-kicad ; Claude conserve uniquement ses MCP globaux natifs.
-- Composants essaimés NOA, conv-exporter et local-worker : commits live égaux aux commits épinglés et copies d'intégration identiques.
-- Second Brain, PowerShell et LM Studio : surfaces suivies identiques au miroir.
-- Dérives exportées : template ~/.rtk/filters.toml et métadonnée du marketplace Claude, avec lastUpdated normalisé car volatil.
+- contrat live Claude/Codex : délégation fondée sur le coût du contexte jetable, micro-tâches séquentielles conservées au principal ;
+- `code-worker` Claude/Codex : déclenchement élargi aux unités autonomes substantielles, boucle correction/retest avant blocage ;
+- `parity.sh` : nouveaux invariants d'isolation/autonomie et miroir des deux `code-worker` ;
+- `PARITÉ OK`, `claude plugin validate ~/.claude/agents` PASS, profil Codex `cli-lean` chargé sans erreur ;
+- aucun modèle, MCP ou nouvel agent ajouté ; aucun gain de tokens chiffré avant I10.
 
 ## Décisions actives
 
 - Deux harnesses pairs. Aucun fallback, aucun propriétaire de projet.
+- Routage : optimiser les tokens jusqu'au checkpoint validé. `code-worker` absorbe une unité autonome quand ses lectures, builds/tests/logs ou corrections produiraient du contexte jetable ; micro-modifications et chaînes fortement séquentielles restent au principal.
+- Un échec de test/commande/build n'est pas une raison d'arrêt tant qu'une action sûre peut encore diagnostiquer, corriger ou fournir une information nouvelle.
 - Ownership métier ≠ mécanisme d'interaction. Une capacité métier décide, connaît
   les invariants et valide ; exécuter un geste GUI pour son compte n'en rend
   jamais propriétaire. La GUI ne passe pas devant un moyen CLI/API/MCP/fichier.
@@ -33,7 +34,7 @@ Validation :
   un état nouveau ; sans capacité restante, le blocage est réel et se rend.
 - `~/.agents/` est le socle canonique. Le miroir le représente dans `agents/`,
   copie physique donc surface de dérive : `parity.sh` en exige l'identité, pour le
-  socle comme pour les quatre définitions d'agents appariées.
+  socle comme pour les six définitions de trois capacités appariées.
 - Le miroir n'est jamais comparé brut au live : il omet `[projects.*]`,
   `[hooks.state]` et `[tui.model_availability_nux]`, et normalise les empreintes.
 - Le miroir reflète le live, il ne le corrige pas : une dérive constatée est
@@ -68,8 +69,8 @@ Le quota Codex est rétabli : les smoke tests Codex du 2026-10-01 ont exécuté 
   `continuity-fixtures.sh`, `effort-bench/`, `skills/`, `konnect/`.
 - Live : `~/.claude/{CLAUDE.md,settings.json}`, `~/.codex/{AGENTS.md,config.toml}`,
   les profils `cli-lean` / `cli-kicad`, et les définitions appariées
-  `~/.claude/agents/{kicad,desktop}-control.md`,
-  `~/.codex/agents/{kicad,desktop}-control.toml`.
+  `~/.claude/agents/{code-worker,kicad-control,desktop-control}.md`,
+  `~/.codex/agents/{code-worker,kicad-control,desktop-control}.toml`.
 - Dépôt : `agents/`, `claude/`, `codex/`, `shared/`, `README.md`, `AGENTS.md`.
 
 ## NEXT ACTION

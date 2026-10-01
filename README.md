@@ -43,7 +43,9 @@ premier, sans reconstruire son état à la main.
 | GitHub-first | ✓ | ✓ | bloc canonique |
 | création de dépôt privé | ✓ | ✓ | `references/git-delivery.md` |
 | boucle de validation | ✓ | ✓ | bloc canonique |
-| philosophie de sous-agents | ✓ | ✓ | bloc canonique |
+| philosophie de sous-agents | ✓ | ✓ | bloc canonique + `code-worker` apparié |
+| isolation du contexte jetable | ✓ | ✓ | handoff compact + `code-worker` pour unités autonomes substantielles |
+| échec intermédiaire ≠ arrêt | ✓ | ✓ | diagnostic/correction/revalidation avant blocage réel |
 | reroutage après `BLOCKED`, cas `GUI_REQUIRED` | ✓ | ✓ | bloc canonique + `kicad-control` / `desktop-control` |
 | philosophie de skills | ✓ | ✓ | bloc canonique |
 | politique Second Brain | ✓ | ✓ | bloc canonique |

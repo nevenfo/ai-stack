@@ -37,6 +37,8 @@ KC_CLAUDE="$HOME_DIR/.claude/agents/kicad-control.md"
 KC_CODEX="$HOME_DIR/.codex/agents/kicad-control.toml"
 DC_CLAUDE="$HOME_DIR/.claude/agents/desktop-control.md"
 DC_CODEX="$HOME_DIR/.codex/agents/desktop-control.toml"
+CW_CLAUDE="$HOME_DIR/.claude/agents/code-worker.md"
+CW_CODEX="$HOME_DIR/.codex/agents/code-worker.toml"
 
 # Skills partagés : une seule copie physique, sous ~/.agents/skills.
 SHARED_SKILLS="project-continuity local-worker noa-local-agents"
@@ -101,6 +103,9 @@ check_both "GitHub-first"         "a un remote GitHub, privé par défaut"
 check_both "checkpoint durable"   "n'est pas un checkpoint"
 check_both "validation"           "sa validation est réellement passée"
 check_both "sous-agents"          "0–1 sous-agent par défaut"
+check_both "isolation contexte"   "exécution séparée évite de polluer le contexte principal"
+check_both "code-worker"          "unité de code autonome substantielle"
+check_both "autonomie après échec" "ne sont pas en eux-mêmes des raisons d'arrêt"
 check_both "skills lazy"          "chargé à la demande"
 check_both "Second Brain"         "jamais le wiki entier"
 check_both "handoff"              "sans adaptation ni transcript"
@@ -131,6 +136,7 @@ pair "kicad-control : sans redélégation"   absent  "desktop-control"        "$
 pair "kicad-control : sans exclusivité"    absent  "unique opérateur"       "$KC_CLAUDE" "$KC_CODEX"
 pair "desktop-control : geste délégué"     présent "sans prendre la propriété du domaine" "$DC_CLAUDE" "$DC_CODEX"
 pair "desktop-control : sans redélégation" présent "sans redéléguer"        "$DC_CLAUDE" "$DC_CODEX"
+pair "code-worker : changement de plan via principal" présent "Plan change suggested:" "$CW_CLAUDE" "$CW_CODEX"
 
 printf 'Skills partagés\n'
 for s in $SHARED_SKILLS; do
@@ -184,6 +190,8 @@ else
   mirror_file "kicad-control (Codex)"    "codex/agents/kicad-control.toml"   "$KC_CODEX"
   mirror_file "desktop-control (Claude)" "claude/agents/desktop-control.md"  "$DC_CLAUDE"
   mirror_file "desktop-control (Codex)"  "codex/agents/desktop-control.toml" "$DC_CODEX"
+  mirror_file "code-worker (Claude)"     "claude/agents/code-worker.md"       "$CW_CLAUDE"
+  mirror_file "code-worker (Codex)"      "codex/agents/code-worker.toml"      "$CW_CODEX"
 
   # Valeurs sémantiques critiques. Les constantes ci-dessus sont l'attendu
   # commun : le live est contrôlé plus haut, le miroir l'est ici, si bien qu'une

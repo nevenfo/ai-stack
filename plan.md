@@ -685,6 +685,39 @@ Aucun `caveman` actif ni découvrable dans la configuration live comme dans le
 miroir ; `parity.sh` échoue si la moindre surface réapparaît ; `project-continuity`
 et le défaut `high` sont inchangés.
 
+## I13 — Routage par isolation contextuelle et autonomie bornée
+
+### Objectif
+
+Aligner le routage sur quatre objectifs : contexte principal propre, coût total en
+tokens faible, autonomie maximale, et arrêt uniquement sur motif réel. Le critère
+n'est pas la difficulté abstraite d'une tâche mais le coût de son contexte
+d'exécution jetable par rapport au handoff.
+
+### Dépendances
+
+I9. Les gains chiffrés restent soumis au benchmark I10.
+
+### Tâches
+
+- [x] I13.1 Faire du contexte jetable le signal principal de délégation : lectures
+      multi-fichiers, builds/tests/logs et boucles diagnostic-correction ; garder
+      micro-modifications et chaînes fortement séquentielles au principal.
+- [x] I13.2 Élargir `code-worker` Claude/Codex aux unités autonomes substantielles
+      et lui interdire l'arrêt sur un simple test rouge, build cassé ou premier
+      essai infructueux tant qu'une action locale sûre peut progresser.
+- [x] I13.3 Renforcer le contrat commun : optimiser les tokens jusqu'au checkpoint
+      validé, pas ceux d'un seul tour ; diagnostic et alternative avant blocage.
+- [x] I13.4 Étendre `parity.sh` au miroir des deux `code-worker` et aux invariants
+      d'isolation/autonomie, sans nouvel agent, modèle, MCP ni abstraction.
+
+### Validation
+
+2026-10-01 : `PARITÉ OK` sur le live et le miroir ; `claude plugin validate
+~/.claude/agents` PASS ; profil Codex `cli-lean` chargé sans erreur. Rollback :
+`C:\Users\FlowUP\.stack-backups\20261001-context-routing`. Aucun gain de tokens
+chiffré n'est affirmé avant I10.
+
 ## J1 — Reroutage après `BLOCKED`, cas `GUI_REQUIRED`
 
 ### Objectif
