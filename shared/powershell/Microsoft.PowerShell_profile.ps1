@@ -2,6 +2,12 @@
 function git { rtk git $args }
 function rg { rtk rg $args }
 function npm { rtk npm $args }
+function npx { rtk npx $args }
+function pnpm { rtk pnpm $args }
+function pip { rtk pip $args }
+function uv { rtk uv $args }
+function gh { rtk gh $args }
+function dotnet { rtk dotnet $args }
 function cargo { rtk cargo $args }
 function pytest { rtk pytest $args }
 
