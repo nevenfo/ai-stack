@@ -1,8 +1,7 @@
 # Remote Desktop Commander lean mode: reduce output noise only for RDC-spawned shells.
 try {
-    $selfProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$PID" -ErrorAction Stop
-    $parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($selfProcess.ParentProcessId)" -ErrorAction Stop
-    if ($parentProcess.Name -ieq 'node.exe' -and $parentProcess.CommandLine -match '@wonderwhy-er[\\/]desktop-commander') {
+    $parentProcess = (Get-Process -Id $PID -ErrorAction Stop).Parent
+    if ($parentProcess.ProcessName -ieq 'node' -and $parentProcess.CommandLine -match '@wonderwhy-er[\\/]desktop-commander') {
         $env:PYTHONIOENCODING = 'utf-8'
         $env:NO_COLOR = '1'
         $PSStyle.OutputRendering = 'PlainText'
