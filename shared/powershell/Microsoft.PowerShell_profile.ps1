@@ -1,3 +1,16 @@
+# Remote Desktop Commander lean mode: reduce output noise only for RDC-spawned shells.
+try {
+    $selfProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$PID" -ErrorAction Stop
+    $parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($selfProcess.ParentProcessId)" -ErrorAction Stop
+    if ($parentProcess.Name -ieq 'node.exe' -and $parentProcess.CommandLine -match '@wonderwhy-er[\\/]desktop-commander') {
+        $env:PYTHONIOENCODING = 'utf-8'
+        $env:NO_COLOR = '1'
+        $PSStyle.OutputRendering = 'PlainText'
+    }
+} catch {
+    # Keep the normal PowerShell environment unchanged if parent detection fails.
+}
+
 # RTK Automatic Wrappers for PowerShell
 function git { rtk git $args }
 function rg { rtk rg $args }
